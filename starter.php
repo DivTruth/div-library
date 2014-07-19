@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: Div Starter (Plugin Framework)
+ * Plugin Name: Div Starter
  * Plugin URI: http://www.divstarter.com/
- * Description: A power tool for theme developers who build custom solutions. <strong>ACF (Advance Custom Fields) 4.0+ Must be installed/activated</strong> in order for many customization options to load.
+ * Description: A power tool for theme developers who build custom solutions. <strong>NOTICE:</strong> ACF (Advance Custom Fields) 4.0+ Must be installed/activated in order for some features to work. Simply use the link provided here.
  * Version: 1.0
  * Author: Div Truth
  * Author URI: http://divtruth.com
@@ -138,9 +138,12 @@ final class DivStarter {
 	 * @return array
 	 */
 	public function action_links( $links ) {
+		$plugin_name = 'advanced-custom-fields';
+		$acf_link = '<a href="' . esc_url( network_admin_url('plugin-install.php?tab=plugin-information&plugin=' . $plugin_name . '&TB_iframe=true&width=600&height=550' ) ) . '" class="thickbox" title="More info about ACF">Install ACF</a>';
 		return array_merge( array(
 			'<a href="' . admin_url( 'admin.php?page=div-settings' ) . '">' . __( 'Settings', 'divstarter' ) . '</a>',
 			'<a href="' . esc_url( apply_filters( 'divstarter_docs_url', 'http://divstarter.com/', 'divstarter' ) ) . '">' . __( 'Documentation', 'divstarter' ) . '</a>',
+			'<br/>'.$acf_link
 		), $links );
 	}
 
