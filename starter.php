@@ -187,15 +187,25 @@ final class DivStarter {
 		/* **************  DS STARTER Paths definition *********************** */
 		define( 'DS_PLUGIN_FILE', 		__FILE__ );
 
-		define( 'DS_INCLUDES_DIR', 	$this->plugin_path().'/includes' );
-		define( 'DS_ABSTRACTS_DIR', 	DS_INCLUDES_DIR.'/abstracts' );
-		define( 'DS_SHORTCODES_DIR', 	DS_INCLUDES_DIR.'/shortcodes' );
-		define( 'DS_WIDGETS_DIR', 		DS_INCLUDES_DIR.'/widgets' );
+		define( 'DS_ASSETS_DIR', 		$this->plugin_path().'/assets/' );
+		define( 'DS_CSS_DIR', 			DS_ASSETS_DIR.'css/' );
+		define( 'DS_IMAGES_DIR', 		DS_ASSETS_DIR.'images/' );
+		define( 'DS_JS_DIR', 			DS_ASSETS_DIR.'js/' );
+
+		define( 'DS_ASSETS_URL', 		$this->plugins_url().'/assets/' );
+		define( 'DS_CSS_URL', 			DS_ASSETS_URL.'css/' );
+		define( 'DS_IMAGES_URL', 		DS_ASSETS_URL.'images/' );
+		define( 'DS_JS_URL', 			DS_ASSETS_URL.'js/' );
+
+		define( 'DS_INCLUDES_DIR', 	$this->plugin_path().'/includes/' );
+		define( 'DS_ABSTRACTS_DIR', 	DS_INCLUDES_DIR.'abstracts/' );
+		define( 'DS_SHORTCODES_DIR', 	DS_INCLUDES_DIR.'shortcodes/' );
+		define( 'DS_WIDGETS_DIR', 		DS_INCLUDES_DIR.'widgets/' );
 		
-		define( 'DS_INCLUDES_URL', 	$this->plugins_url().'/includes' );
-		define( 'DS_ABSTRACTS_URL', 	DS_INCLUDES_DIR.'/abstracts' );
-		define( 'DS_SHORTCODES_URL', 	DS_INCLUDES_DIR.'/shortcodes' );
-		define( 'DS_WIDGETS_URL', 		DS_INCLUDES_DIR.'/widgets' );
+		define( 'DS_INCLUDES_URL', 	$this->plugins_url().'/includes/' );
+		define( 'DS_ABSTRACTS_URL', 	DS_INCLUDES_URL.'abstracts/' );
+		define( 'DS_SHORTCODES_URL', 	DS_INCLUDES_URL.'shortcodes/' );
+		define( 'DS_WIDGETS_URL', 		DS_INCLUDES_URL.'widgets/' );
 
 		if ( ! defined( 'DS_TEMPLATE_PATH' ) ) {
 			define( 'DS_TEMPLATE_PATH', $this->template_path() );
@@ -207,9 +217,9 @@ final class DivStarter {
 	 * Include required core files used in admin and on the frontend.
 	 */
 	private function includes() {
-		include_once( 'includes/ds-core-functions.php' );				# Core div functions
+		include_once( 'includes/ds-core-functions.php' );			# Core div functions
 		include_once( 'includes/class-ds-prints.php' );				# Printout settings class
-		include_once( 'includes/class-ds-detection.php' );				# Browser/Device Detection class
+		include_once( 'includes/class-ds-detection.php' );			# Browser/Device Detection class
 		include_once( 'includes/class-ds-shortcodes.php' );			# Shortcodes class
 
 		if ( is_admin() ) {
@@ -225,7 +235,8 @@ final class DivStarter {
 		}
 
 		// Classes (used on all pages)
-		include_once( 'includes/class-ds-helper.php' );		# Power tools for data manipluation
+		include_once( 'includes/class-ds-helper.php' );			# Power tools for data manipluation
+		include_once( 'includes/class-ds-debug.php' );			# Debug methods for troubleshooting
 		include_once( 'includes/class-ds-taxonomy.php' );		# For creating Custom taxonomies
 		include_once( 'includes/class-ds-cpt.php' );			# For creating Custom Post Types
 		include_once( 'includes/class-ds-user.php' );			# For creating Custom User Types
@@ -246,7 +257,7 @@ final class DivStarter {
 	 */
 	public function frontend_includes() {
 		// include_once( 'includes/class-ds-template-loader.php' );		# Template Loader
-		// include_once( 'includes/class-ds-frontend-scripts.php' );		# Frontend Scripts
+		// include_once( 'includes/class-ds-frontend-scripts.php' );	# Frontend Scripts
 	}
 
 	/**
