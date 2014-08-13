@@ -1,22 +1,21 @@
 <?php
 /**
- * DivStarter Core Functions
- *
+ * Div Starter Core Functions
  * General core functions available on both the front-end and admin.
  *
- * @author 		DivTruth
- * @category 	Core
- * @package 	DivStarter/Functions
  * @version     1.0
+ * @package 	DivStarter/Functions
+ * @category 	Core
+ * @author 		Div Blend Team
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 # Include core functions
-// include( 'div-scope-functions.php' );
+// include( 'ds-scope-functions.php' );
 
 # Filters on data used in admin and frontend
-// add_filter( 'divstarter_custom_filter', 'sanitize_text_field' );
+// add_filter( 'ds_custom_filter', 'sanitize_text_field' );
 
 
 /**
@@ -27,22 +26,22 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  * @param string $name (default: '')
  * @return void
  */
-function div_get_template_part( $slug, $name = '' ) {
+function ds_get_template_part( $slug, $name = '' ) {
 	$template = '';
 
 	# Look in yourtheme/slug-name.php and yourtheme/divstarter/slug-name.php
 	if ( $name ) {
-		$template = locate_template( array( "{$slug}-{$name}.php", DIV()->template_path() . "{$slug}-{$name}.php" ) );
+		$template = locate_template( array( "{$slug}-{$name}.php", DS()->template_path() . "{$slug}-{$name}.php" ) );
 	}
 
 	# Get default slug-name.php
-	if ( ! $template && $name && file_exists( DIV()->plugin_path() . "/templates/{$slug}-{$name}.php" ) ) {
-		$template = DIV()->plugin_path() . "/templates/{$slug}-{$name}.php";
+	if ( ! $template && $name && file_exists( DS()->plugin_path() . "/templates/{$slug}-{$name}.php" ) ) {
+		$template = DS()->plugin_path() . "/templates/{$slug}-{$name}.php";
 	}
 
 	# If template file doesn't exist, look in yourtheme/slug.php and yourtheme/divstarter/slug.php
 	if ( ! $template ) {
-		$template = locate_template( array( "{$slug}.php", DIV()->template_path() . "{$slug}.php" ) );
+		$template = locate_template( array( "{$slug}.php", DS()->template_path() . "{$slug}.php" ) );
 	}
 
 	# Allow 3rd party plugin filter template file from their plugin
@@ -63,12 +62,12 @@ function div_get_template_part( $slug, $name = '' ) {
  * @param string $default_path (default: '')
  * @return void
  */
-function div_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
+function ds_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
 	if ( $args && is_array( $args ) ) {
 		extract( $args );
 	}
 
-	$located = div_locate_template( $template_name, $template_path, $default_path );
+	$located = ds_locate_template( $template_name, $template_path, $default_path );
 
 	if ( ! file_exists( $located ) ) {
 		_doing_it_wrong( __FUNCTION__, sprintf( '<code>%s</code> does not exist.', $located ), '2.1' );
@@ -97,13 +96,13 @@ function div_get_template( $template_name, $args = array(), $template_path = '',
  * @param string $default_path (default: '')
  * @return string
  */
-function div_locate_template( $template_name, $template_path = '', $default_path = '' ) {
+function ds_locate_template( $template_name, $template_path = '', $default_path = '' ) {
 	if ( ! $template_path ) {
-		$template_path = DIV()->template_path();
+		$template_path = DS()->template_path();
 	}
 
 	if ( ! $default_path ) {
-		$default_path = DIV()->plugin_path() . '/templates/';
+		$default_path = DS()->plugin_path() . '/templates/';
 	}
 
 	# Look within passed path within the theme - this is priority
@@ -128,36 +127,36 @@ function div_locate_template( $template_name, $template_path = '', $default_path
  *
  * @param string $code
  */
-function div_enqueue_js( $code ) {
-	global $div_queued_js;
+function ds_enqueue_js( $code ) {
+	global $ds_queued_js;
 
-	if ( empty( $div_queued_js ) ) {
-		$div_queued_js = '';
+	if ( empty( $ds_queued_js ) ) {
+		$ds_queued_js = '';
 	}
 
-	$div_queued_js .= "\n" . $code . "\n";
+	$ds_queued_js .= "\n" . $code . "\n";
 }
 
 /**
  * Output any queued javascript code in the footer.
  *
- * @global $div_queued_js
+ * @global $ds_queued_js
  * @usedby wp_footer
  */
-function div_print_js() {
-	global $div_queued_js;
+function ds_print_js() {
+	global $ds_queued_js;
 
-	if ( ! empty( $div_queued_js ) ) {
+	if ( ! empty( $ds_queued_js ) ) {
 
 		echo "<!-- DivStarter JavaScript -->\n<script type=\"text/javascript\">\njQuery(function($) {";
 
 		// Sanitize
-		$div_queued_js = wp_check_invalid_utf8( $div_queued_js );
-		$div_queued_js = preg_replace( '/&#(x)?0*(?(1)27|39);?/i', "'", $div_queued_js );
-		$div_queued_js = str_replace( "\r", '', $div_queued_js );
+		$ds_queued_js = wp_check_invalid_utf8( $ds_queued_js );
+		$ds_queued_js = preg_replace( '/&#(x)?0*(?(1)27|39);?/i', "'", $ds_queued_js );
+		$ds_queued_js = str_replace( "\r", '', $ds_queued_js );
 
-		echo $div_queued_js . "});\n</script>\n";
+		echo $ds_queued_js . "});\n</script>\n";
 
-		unset( $div_queued_js );
+		unset( $ds_queued_js );
 	}
 }

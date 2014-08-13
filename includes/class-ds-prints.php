@@ -1,18 +1,18 @@
 <?php
 /**
- * DIV_Prints class.
+ * DS_Prints class.
  * Used to print out settings, shortcodes, enqued scripts & styles, etc.
  *
- * @class 		DIV_Prints
+ * @class 		DS_Prints
  * @version		1.0
  * @package		DivStarter/Classes
  * @category	Class
- * @author 		Div Truth
+ * @author 		Div Blend Team
  */
 
 if( ! defined( 'ABSPATH' ) ) exit;
 
-class DIV_Prints {
+class DS_Prints {
 
 	/**
 	 * Constructor.

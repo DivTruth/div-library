@@ -1,18 +1,18 @@
 <?php
 /**
- * DIV_Shortcodes class.
+ * DS_Shortcodes class.
  * All Div Starter shortcodes will be added here by their respectice classes
  *
- * @class 		DIV_Shortcodes
+ * @class 		DS_Shortcodes
  * @version		1.0
  * @package		DivStarter/Classes
  * @category	Class
- * @author 		Div Truth
+ * @author 		Div Blend Team
  */
 
 if( ! defined( 'ABSPATH' ) ) exit;
 
-class DIV_Shortcodes {
+class DS_Shortcodes {
 
 	/**
 	 * Init shortcodes
@@ -69,7 +69,7 @@ class DIV_Shortcodes {
 	 * @return string
 	 */
 	public static function chart( $atts ) {
-		return self::shortcode_wrapper( array( 'DIV_Shortcode_Utils', 'chart' ), $atts );
+		return self::shortcode_wrapper( array( 'DS_Shortcode_Utils', 'chart' ), $atts );
 	}
 
 	/**
@@ -80,7 +80,7 @@ class DIV_Shortcodes {
 	 * @return string
 	 */
 	public static function download( $atts ) {
-		return self::shortcode_wrapper( array( 'DIV_Shortcode_Download', 'output' ), $atts );
+		return self::shortcode_wrapper( array( 'DS_Shortcode_Download', 'output' ), $atts );
 	}
 
 	/**
@@ -91,7 +91,7 @@ class DIV_Shortcodes {
 	 * @return string
 	 */
 	public static function pdf( $atts ) {
-		return self::shortcode_wrapper( array( 'DIV_Shortcode_Utils', 'pdf' ), $atts );
+		return self::shortcode_wrapper( array( 'DS_Shortcode_Utils', 'pdf' ), $atts );
 	}
 
 }

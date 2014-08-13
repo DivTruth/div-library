@@ -1,13 +1,12 @@
 <?php
 /**
  * Div Starter Template Hooks
- *
  * Action/filter hooks used for Div Starter functions/templates
  *
- * @author 		Div Truth
- * @category 	Core
- * @package 	DivStarter/Templates
  * @version     1.0
+ * @package 	DivStarter/Templates
+ * @category 	Core
+ * @author 		Div Blend Team
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -15,10 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 /** 
  * WP Header
  *
- * @see  div_generator_tag()
+ * @see  ds_generator_tag()
  */
-add_action( 'get_the_generator_html', 'div_generator_tag', 10, 2 );
-add_action( 'get_the_generator_xhtml', 'div_generator_tag', 10, 2 );
+add_action( 'get_the_generator_html', 'ds_generator_tag', 10, 2 );
+add_action( 'get_the_generator_xhtml', 'ds_generator_tag', 10, 2 );
 
 /**
  * Content Wrappers
@@ -46,6 +45,6 @@ add_action( 'divstarter_sidebar', 'divstarter_get_sidebar', 10 );
 /**
  * Footer
  *
- * @see  div_print_js()
+ * @see  ds_print_js()
  */
-add_action( 'wp_footer', 'div_print_js', 99 );
+add_action( 'wp_footer', 'ds_print_js', 99 );

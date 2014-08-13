@@ -1,20 +1,20 @@
 <?php
 /**
  * Plugin Name: Div Starter
- * Plugin URI: http://www.divstarter.com/
- * Description: A power tool for theme developers who build custom solutions. <strong>NOTICE:</strong> ACF (Advance Custom Fields) 4.0+ Must be installed/activated in order for some features to work. Simply use the link provided here.
- * Version: 1.0
- * Author: Div Truth
- * Author URI: http://divtruth.com
+ * Plugin URI: http://divblend.com/div-starter/
+ * Description: A power, indispensable tool for theme developers who build custom solutions.
+ * Version: 0.1 (alpha)
+ * Author: Div Blend Team
+ * Author URI: http://divblend.com/div-blend-contributors/
  * Requires at least: 3.8
  * Tested up to: 3.9
  *
- * Text Domain: divtruth
+ * Text Domain: divstarter
  * Domain Path: /i18n/languages/
  *
- * @package Div-Starter
+ * @package Div Starter
  * @category Core
- * @author DivTruth
+ * @author Div Blend Team
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; # Exit if accessed directly
@@ -33,27 +33,27 @@ final class DivStarter {
 	/**
 	 * @var string
 	 */
-	public $version = '1.0';
+	public $version = '0.1';
 
 	/**
 	 * @var DivStarter The single instance of the class
-	 * @since 2.1
+	 * @since 1.0
 	 */
 	protected static $_instance = null;
 
 	/**
-	 * @var DIV_Detection $user_agent
+	 * @var DS_Detection $user_agent
 	 */
 	public $user_agent = null;
 
 	/**
-	 * Main DivStarter Instance
+	 * Main DivStarter Instance (singleton)
 	 *
 	 * Ensures only one instance of DivStarter is loaded or can be loaded.
 	 *
 	 * @since 1.0
 	 * @static
-	 * @see DIV()
+	 * @see DS()
 	 * @return DivStarter - Main instance
 	 */
 	public static function instance() {
@@ -66,7 +66,7 @@ final class DivStarter {
 	/**
 	 * Cloning is forbidden.
 	 *
-	 * @since 2.1
+	 * @since 1.0
 	 */
 	public function __clone() {
 		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'divstarter' ), '2.1' );
@@ -75,7 +75,7 @@ final class DivStarter {
 	/**
 	 * Unserializing instances of this class is forbidden.
 	 *
-	 * @since 2.1
+	 * @since 1.0
 	 */
 	public function __wakeup() {
 		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'divstarter' ), '2.1' );
@@ -118,11 +118,11 @@ final class DivStarter {
 		add_action( 'widgets_init', array( $this, 'include_widgets' ) );
 		add_action( 'init', array( $this, 'init' ), 0 );
 		add_action( 'init', array( $this, 'include_template_functions' ) );
-		add_action( 'init', array( 'DIV_Shortcodes', 'init' ) );
+		add_action( 'init', array( 'DS_Shortcodes', 'init' ) );
 		
 		// Register ACF Add-on Fields
-		add_action( 'acf/register_fields', array( $this, 'div_register_acf_fields' ) );
-		add_action( 'acf_settings', array( $this, 'div_acf_settings' ) );
+		add_action( 'acf/register_fields', array( $this, 'ds_register_acf_fields' ) );
+		add_action( 'acf_settings', array( $this, 'ds_acf_settings' ) );
 		
 		// Setup any theme environment settings
 		add_action( 'after_setup_theme', array( $this, 'setup_environment' ) );
@@ -141,14 +141,14 @@ final class DivStarter {
 		$plugin_name = 'advanced-custom-fields';
 		$acf_link = '<a href="' . esc_url( network_admin_url('plugin-install.php?tab=plugin-information&plugin=' . $plugin_name . '&TB_iframe=true&width=600&height=550' ) ) . '" class="thickbox" title="More info about ACF">Install ACF</a>';
 		return array_merge( array(
-			'<a href="' . admin_url( 'admin.php?page=div-settings' ) . '">' . __( 'Settings', 'divstarter' ) . '</a>',
+			'<a href="' . admin_url( 'admin.php?page=ds-settings' ) . '">' . __( 'Settings', 'divstarter' ) . '</a>',
 			'<a href="' . esc_url( apply_filters( 'divstarter_docs_url', 'http://divstarter.com/', 'divstarter' ) ) . '">' . __( 'Documentation', 'divstarter' ) . '</a>',
 			'<br/>'.$acf_link
 		), $links );
 	}
 
 	/**
-	 * Auto-load DIV classes on demand to reduce memory consumption.
+	 * Auto-load DS classes on demand to reduce memory consumption.
 	 *
 	 * @param mixed $class
 	 * @return void
@@ -158,7 +158,7 @@ final class DivStarter {
 		$class = strtolower( $class );
 		$file = 'class-' . str_replace( '_', '-', $class ) . '.php';
 
-		if ( strpos( $class, 'div_shortcode_' ) === 0 ) {
+		if ( strpos( $class, 'ds_shortcode_' ) === 0 ) {
 			$path = $this->plugin_path() . '/includes/shortcodes/';
 		} 
 
@@ -174,31 +174,31 @@ final class DivStarter {
 	}
 
 	/**
-	 * Define DIV Constants
+	 * Define DS Constants
 	 */
 	private function define_constants() {
 		define( 'WP_VERSION', get_bloginfo('version') );
-		define( 'DIV_VERSION', $this->version );
+		define( 'DS_VERSION', $this->version );
 
 		/* **************  THEME Paths definition *********************** */
 		define( 'THEME_URL', get_stylesheet_directory_uri().'/' );
 		define( 'THEME_DIR', get_stylesheet_directory().'/' );
 		
-		/* **************  DIV STARTER Paths definition *********************** */
-		define( 'DIV_PLUGIN_FILE', 		__FILE__ );
+		/* **************  DS STARTER Paths definition *********************** */
+		define( 'DS_PLUGIN_FILE', 		__FILE__ );
 
-		define( 'DIV_INCLUDES_DIR', 	$this->plugin_path().'/includes' );
-		define( 'DIV_ABSTRACTS_DIR', 	DIV_INCLUDES_DIR.'/abstracts' );
-		define( 'DIV_SHORTCODES_DIR', 	DIV_INCLUDES_DIR.'/shortcodes' );
-		define( 'DIV_WIDGETS_DIR', 		DIV_INCLUDES_DIR.'/widgets' );
+		define( 'DS_INCLUDES_DIR', 	$this->plugin_path().'/includes' );
+		define( 'DS_ABSTRACTS_DIR', 	DS_INCLUDES_DIR.'/abstracts' );
+		define( 'DS_SHORTCODES_DIR', 	DS_INCLUDES_DIR.'/shortcodes' );
+		define( 'DS_WIDGETS_DIR', 		DS_INCLUDES_DIR.'/widgets' );
 		
-		define( 'DIV_INCLUDES_URL', 	$this->plugins_url().'/includes' );
-		define( 'DIV_ABSTRACTS_URL', 	DIV_INCLUDES_DIR.'/abstracts' );
-		define( 'DIV_SHORTCODES_URL', 	DIV_INCLUDES_DIR.'/shortcodes' );
-		define( 'DIV_WIDGETS_URL', 		DIV_INCLUDES_DIR.'/widgets' );
+		define( 'DS_INCLUDES_URL', 	$this->plugins_url().'/includes' );
+		define( 'DS_ABSTRACTS_URL', 	DS_INCLUDES_DIR.'/abstracts' );
+		define( 'DS_SHORTCODES_URL', 	DS_INCLUDES_DIR.'/shortcodes' );
+		define( 'DS_WIDGETS_URL', 		DS_INCLUDES_DIR.'/widgets' );
 
-		if ( ! defined( 'DIV_TEMPLATE_PATH' ) ) {
-			define( 'DIV_TEMPLATE_PATH', $this->template_path() );
+		if ( ! defined( 'DS_TEMPLATE_PATH' ) ) {
+			define( 'DS_TEMPLATE_PATH', $this->template_path() );
 		}
 
 	}
@@ -207,10 +207,10 @@ final class DivStarter {
 	 * Include required core files used in admin and on the frontend.
 	 */
 	private function includes() {
-		include_once( 'includes/div-core-functions.php' );				# Core div functions
-		include_once( 'includes/class-div-prints.php' );				# Printout settings class
-		include_once( 'includes/class-div-detection.php' );				# Browser/Device Detection class
-		include_once( 'includes/class-div-shortcodes.php' );			# Shortcodes class
+		include_once( 'includes/ds-core-functions.php' );				# Core div functions
+		include_once( 'includes/class-ds-prints.php' );				# Printout settings class
+		include_once( 'includes/class-ds-detection.php' );				# Browser/Device Detection class
+		include_once( 'includes/class-ds-shortcodes.php' );			# Shortcodes class
 
 		if ( is_admin() ) {
 			// include_once( 'includes/admin/class-wc-admin.php' );
@@ -225,34 +225,35 @@ final class DivStarter {
 		}
 
 		// Classes (used on all pages)
-		include_once( 'includes/class-div-helper.php' );		# Power tools for data manipluation
-		include_once( 'includes/class-div-taxonomy.php' );		# For creating Custom taxonomies progamically
-		include_once( 'includes/class-div-cpt.php' );			# For creating Custom Post Types programically
+		include_once( 'includes/class-ds-helper.php' );		# Power tools for data manipluation
+		include_once( 'includes/class-ds-taxonomy.php' );		# For creating Custom taxonomies
+		include_once( 'includes/class-ds-cpt.php' );			# For creating Custom Post Types
+		include_once( 'includes/class-ds-user.php' );			# For creating Custom User Types
 
 		// Include template hooks in time for themes to remove/modify them
-		include_once( 'includes/div-template-hooks.php' );
+		include_once( 'includes/ds-template-hooks.php' );
 	}
 
 	/**
 	 * Include required ajax files.
 	 */
 	public function ajax_includes() {
-		// include_once( 'includes/class-div-ajax.php' );					# Ajax functions for admin and the front-end
+		// include_once( 'includes/class-ds-ajax.php' );					# Ajax functions for admin and the front-end
 	}
 
 	/**
 	 * Include required frontend files.
 	 */
 	public function frontend_includes() {
-		// include_once( 'includes/class-div-template-loader.php' );		# Template Loader
-		// include_once( 'includes/class-div-frontend-scripts.php' );		# Frontend Scripts
+		// include_once( 'includes/class-ds-template-loader.php' );		# Template Loader
+		// include_once( 'includes/class-ds-frontend-scripts.php' );		# Frontend Scripts
 	}
 
 	/**
 	 * Function used to Init DivStarter Template Functions - This makes them pluggable by plugins and themes.
 	 */
 	public function include_template_functions() {
-		include_once( 'includes/div-template-functions.php' );
+		include_once( 'includes/ds-template-functions.php' );
 	}
 	
 	/**
@@ -267,9 +268,9 @@ final class DivStarter {
 	 * Include core widgets
 	 */
 	public function include_widgets() {
-		include_once( 'includes/abstracts/abstract-div-widget.php' );
-		include_once( 'includes/widgets/class-div-widget-banner.php' );
-		include_once( 'includes/widgets/class-div-widget-text-image.php' );
+		include_once( 'includes/abstracts/abstract-ds-widget.php' );
+		include_once( 'includes/widgets/class-ds-widget-banner.php' );
+		include_once( 'includes/widgets/class-ds-widget-text-image.php' );
 	}
 
 	/**
@@ -280,7 +281,7 @@ final class DivStarter {
 		do_action( 'before_divstarter_init' );
 
 		// Load Class instances
-		$this->user_agent = new DIV_Detection();		# Detection class
+		$this->user_agent = new DS_Detection();		# Detection class
 
 		// Init action
 		do_action( 'divstarter_init' );
@@ -293,12 +294,12 @@ final class DivStarter {
 
 	}
 
-	public function div_register_acf_fields(){  
+	public function ds_register_acf_fields(){  
 		#ACF 4.0+ Add ons
 	    include_once($this->plugin_path().'/includes/fields/acf-repeater/repeater.php');                                  #FIELD: Repeater
 	    include_once($this->plugin_path().'/includes/fields/acf-gallery/gallery.php');                                    #FIELD: Gallery
 	}
-	public function div_acf_settings( $options ){
+	public function ds_acf_settings( $options ){
 	    // activate add-ons
 	    //TODO: Need to store in DB
 	    $options['activation_codes']['repeater'] = 'QJF7-L4IX-UCNP-RF2W';
@@ -334,7 +335,7 @@ final class DivStarter {
 	 * @return string
 	 */
 	public function template_path() {
-		return apply_filters( 'DIV_TEMPLATE_PATH', 'div-starter/' );
+		return apply_filters( 'DS_TEMPLATE_PATH', 'div-starter/' );
 	}
 
 	/**
@@ -351,13 +352,13 @@ final class DivStarter {
 endif;
 
 /**
- * Returns the main instance of DIV to prevent the need to use globals.
+ * Returns the main instance of DS to prevent the need to use globals.
  *
  * @since  1.0
  * @return DivStarter
  */
-function DIV() {
+function DS() {
 	return DivStarter::instance();
 }
 
-DIV();
+DS();

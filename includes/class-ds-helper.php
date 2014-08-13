@@ -1,18 +1,18 @@
 <?php
 /**
- * DIV_Helper class.
+ * DS_Helper class.
  * General class with main methods and helper methods
  *
- * @class       DIV_Helper
+ * @class       DS_Helper
  * @version     1.0
  * @package     DivStarter/Classes
  * @category    Class
- * @author      Div Truth
+ * @author      Div Blend Team
  */
 
 if( ! defined( 'ABSPATH' ) ) exit;
 
-class DIV_Helper{
+class DS_Helper{
     var $dir = array();
 
     static $_reserved = array( 'attachment', 'attachment_id', 'author', 'author_name', 'calendar', 'cat', 'category','category__and', 'category__in', 'category__not_in', 
@@ -39,7 +39,7 @@ class DIV_Helper{
      *
      */
     static function beautify( $string ) {
-      return apply_filters( 'div_beautify', ucwords( str_replace( '_', ' ', $string ) ) );
+      return apply_filters( 'ds_beautify', ucwords( str_replace( '_', ' ', $string ) ) );
     }
 
 
@@ -54,7 +54,7 @@ class DIV_Helper{
      *
      */
     static function uglify( $string ) {
-      return apply_filters( 'div_uglify', str_replace( '-', '_', sanitize_title( $string ) ) );
+      return apply_filters( 'ds_uglify', str_replace( '-', '_', sanitize_title( $string ) ) );
     }
 
     /**
@@ -88,7 +88,7 @@ class DIV_Helper{
         return 'n-a';
       }
 
-      return apply_filters( 'div_sluglify', $text );
+      return apply_filters( 'ds_sluglify', $text );
     }
 
 
@@ -145,22 +145,22 @@ class DIV_Helper{
 
       // Save time if string in uncountable
       if ( in_array( strtolower( $string ), $uncountable ) )
-        return apply_filters( 'div_pluralize', $string );
+        return apply_filters( 'ds_pluralize', $string );
 
       // Check for irregular words
       foreach ( $irregular as $noun ) {
         if ( strtolower( $string ) == $noun[0] )
-          return apply_filters( 'div_pluralize', $noun[1] );
+          return apply_filters( 'ds_pluralize', $noun[1] );
       }
 
       // Check for plural forms
       foreach ( $plural as $pattern ) {
         if ( preg_match( $pattern[0], $string ) )
-          return apply_filters( 'div_pluralize', preg_replace( $pattern[0], $pattern[1], $string ) );
+          return apply_filters( 'ds_pluralize', preg_replace( $pattern[0], $pattern[1], $string ) );
       }
 
       // Return if noting found
-      return apply_filters( 'div_pluralize', $string );
+      return apply_filters( 'ds_pluralize', $string );
     }
 
     /**
@@ -214,23 +214,23 @@ class DIV_Helper{
         $lowercased_word = strtolower($word);
         foreach ($uncountable as $_uncountable) {
             if(substr($lowercased_word,(-1*strlen($_uncountable))) == $_uncountable){
-                return apply_filters( 'div_singularize', $word );
+                return apply_filters( 'ds_singularize', $word );
             }
         }
 
         foreach ($irregular as $_plural=> $_singular){
             if (preg_match('/('.$_singular.')$/i', $word, $arr)) {
-                return apply_filters( 'div_singularize', preg_replace('/('.$_singular.')$/i', substr($arr[0],0,1).substr($_plural,1), $word) );
+                return apply_filters( 'ds_singularize', preg_replace('/('.$_singular.')$/i', substr($arr[0],0,1).substr($_plural,1), $word) );
             }
         }
 
         foreach ($singular as $rule => $replacement) {
             if (preg_match($rule, $word)) {
-                return apply_filters( 'div_singularize', preg_replace($rule, $replacement, $word) );
+                return apply_filters( 'ds_singularize', preg_replace($rule, $replacement, $word) );
             }
         }
 
-        return apply_filters( 'div_singularize', $word );
+        return apply_filters( 'ds_singularize', $word );
     }
 
     /**
@@ -262,7 +262,7 @@ class DIV_Helper{
     static function camel_case($str) {
       $str[0] = strtolower($str[0]);
       $func = create_function('$c', 'return "_" . strtolower($c[1]);');
-      return apply_filters( 'div_camel_case', preg_replace_callback('/([A-Z])/', $func, $str) );
+      return apply_filters( 'ds_camel_case', preg_replace_callback('/([A-Z])/', $func, $str) );
     }
 
     /**

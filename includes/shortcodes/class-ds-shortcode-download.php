@@ -1,18 +1,17 @@
 <?php
 /**
- * Download Shortcode
- *
+ * Div Starter Download Shortcode
  * These shortcode provide an icon specific buttong for downloading media files by URL
  * @example 	[download type="jpg" url="http://4.bp.blogspot.com/-E-uqTphmvlM/U36UVO-W4_I/AAAAAAACF2k/OPzg-bacCX0/s1600/google+glass.jpg" title="Google Glass" desc="What is next for Google Glass?" align="left" target="_blank"]
  *
- * @author 		H.-Peter Pfeufer (modified by Div Truth)
- * @category 	Shortcodes
- * @package 	DivStarter/Shortcodes/Download
  * @version     1.0
+ * @package 	DivStarter/Shortcodes/Download
+ * @category 	Shortcodes
+ * @author 		H.-Peter Pfeufer (modified by Div Truth)
  * @credit 		Graphics made by: <a href="http://kkoepke.de">Kai Köpke</a>. If you made your own graphic for this button, 
  *            feel free to write it in the comments under http://blog.ppfeufer.de/wordpress-button-fuer-downloads-erzeugen/.
  */
-class DIV_Shortcode_Download {
+class DS_Shortcode_Download {
 
 	/**
 	 * Constructor
@@ -20,8 +19,8 @@ class DIV_Shortcode_Download {
 	 * @since 2.0
 	 * @author ppfeufer
 	 */
-	function DIV_Shortcode_Download() {
-		DIV_Shortcode_Download::construct_button();
+	function DS_Shortcode_Download() {
+		DS_Shortcode_Download::construct_button();
 	}
 
 	function construct_button() {
@@ -474,7 +473,7 @@ class DIV_Shortcode_Download {
 		 */
 		$var_sHTML = '';
 
-		$var_sHTML .= '<form name="" class="download_form" action="'.DIV_INCLUDES_URL.'/div-download.php">
+		$var_sHTML .= '<form name="" class="download_form" action="'.DS_INCLUDES_URL.'/div-download.php">
 			<input type="hidden" id="file" name="file" value="'.$url.'">
 			<div class="button download-button align' . $align . '">
 				<a ' . $type . ' href="" ' . $target . '>
@@ -489,6 +488,6 @@ class DIV_Shortcode_Download {
 		echo $var_sHTML;
 	} // END output($atts)
 
-} // END class DIV_Shortcode_Download
+} // END class DS_Shortcode_Download
 
-new DIV_Shortcode_Download();
+new DS_Shortcode_Download();

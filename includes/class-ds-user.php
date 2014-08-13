@@ -1,9 +1,9 @@
 <?php
 /**
- * DIV_User class.
- * Used to print out settings, shortcodes, enqued scripts & styles, etc.
+ * DS_User class.
+ * Manage user permissions, roles and other user-based functionality for development
  *
- * @class 		DIV_User
+ * @class 		DS_User
  * @version		1.0
  * @package		DivStarter/Classes
  * @category	Class
@@ -12,7 +12,7 @@
 
 if( ! defined( 'ABSPATH' ) ) exit;
 
-class DIV_User {
+class DS_User {
 
 	/**
 	 * Constructor.

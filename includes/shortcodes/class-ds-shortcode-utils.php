@@ -1,15 +1,14 @@
 <?php
 /**
- * Utils Shortcodes
- *
+ * Div Starter Utils Shortcodes
  * These utility shortcodes provide some common use case scenarios for shortcodes
  *
- * @author 		DivStarter
- * @category 	Shortcodes
- * @package 	Div-Starter/Shortcodes/Utils
  * @version     1.0
+ * @package 	Div-Starter/Shortcodes/Utils
+ * @category 	Shortcodes
+ * @author 		Div Blend Team
  */
-class DIV_Shortcode_Utils {
+class DS_Shortcode_Utils {
 
 	/**
 	 * GOOGLE PDF VIEWER

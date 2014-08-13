@@ -1,32 +1,32 @@
 <?php
 /**
- * Banner Widget
+ * Div Starter Text/Image Widget
  *
- * Easily add a banner image and link
+ * A text widget with an image
  *
- * @author 		DivStarter
- * @category 	Widgets
- * @package 	DivStarter/Widgets
  * @version 	1.0
- * @extends 	DIV_Widget
+ * @package 	DivStarter/Widgets
+ * @category 	Widgets
+ * @author 		Div Blend Team
+ * @extends 	DS_Widget
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-class Div_Widget_Banner extends DIV_Widget {
+class DS_Widget_Text_Image extends DS_Widget {
 
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->widget_cssclass    = 'divstarter widget_banner';
-		$this->widget_description = __( "Add a banner image in the sidebar.", 'divstarter' );
-		$this->widget_id          = 'divstarter_widget_banner';
-		$this->widget_name        = __( 'DIV: Banner', 'divstarter' );
+		$this->widget_cssclass    = 'divstarter widget_text_image';
+		$this->widget_description = __( "Simple text widget with an image.", 'divstarter' );
+		$this->widget_id          = 'divstarter_widget_text_image';
+		$this->widget_name        = __( 'DS: Text & Image', 'divstarter' );
 		$this->settings           = array(
 			'title'  => array(
 				'type'  => 'text',
-				'std'   => __( 'Advertisement', 'divstarter' ),
+				'std'   => __( '', 'divstarter' ),
 				'label' => __( 'Title:', 'divstarter' )
 			),
 			'image_id' => array(
@@ -44,10 +44,15 @@ class Div_Widget_Banner extends DIV_Widget {
 				'std'   => 1,
 				'label' => __( 'Open in a new window?', 'divstarter' )
 			),
+			'content'  => array(
+				'type'  => 'textarea',
+				'std'   => __( '', 'divstarter' ),
+				'label' => __( 'Text:', 'divstarter' )
+			),
 		);
 		parent::__construct();
 	}
 
 }
 
-register_widget( 'Div_Widget_Banner' );
+register_widget( 'DS_Widget_Text_Image' );

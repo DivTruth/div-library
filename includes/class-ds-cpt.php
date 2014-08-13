@@ -3,18 +3,18 @@
  * Div Starter Custom Post Type Class
  * A Quick and accessible class for making CPTs withing the CUSTOM module
  *
- * @class       DIV_CPT
- * @author      Gijs Jorissen (Modified by: DivTruth)
+ * @class       DS_CPT
+ * @author      Gijs Jorissen (Modified by: Div Blend Team)
  * @category    Core
  * @package     DivStarter/Classes
- * @uses        DIV_Helper
+ * @uses        DS_Helper
  * @version     1.0
  * @link        http://wp.tutsplus.com/tutorials/creative-coding/custom-post-type-helper-class/
  */
 
 if( ! defined( 'ABSPATH' ) ) exit;
 
-class DIV_CPT{
+class DS_CPT{
     var $name;
     var $title;
     var $plural;
@@ -24,7 +24,7 @@ class DIV_CPT{
     var $remove_features;
     
     /**
-     * Construct a new Cuztom Post Type
+     * Construct a new Custom Post Type
      *
      * @param   string|array    $name
      * @param   array           $args
@@ -38,13 +38,13 @@ class DIV_CPT{
         if( ! empty( $name ) ) {
             // If $name is an array, the first element is the singular name, the second is the plural name
             if( is_array( $name ) ) {
-                $this->name     = DIV_Helper::uglify( $name[0] );
-                $this->title    = DIV_Helper::beautify( $name[0] );
-                $this->plural   = DIV_Helper::beautify( $name[1] );
+                $this->name     = DS_Helper::uglify( $name[0] );
+                $this->title    = DS_Helper::beautify( $name[0] );
+                $this->plural   = DS_Helper::beautify( $name[1] );
             } else {
-                $this->name     = DIV_Helper::uglify( $name );
-                $this->title    = DIV_Helper::beautify( $name );
-                $this->plural   = DIV_Helper::pluralize( DIV_Helper::beautify( $name ) );
+                $this->name     = DS_Helper::uglify( $name );
+                $this->title    = DS_Helper::beautify( $name );
+                $this->plural   = DS_Helper::pluralize( DS_Helper::beautify( $name ) );
             }
 
             $this->args         = $args;
@@ -109,15 +109,15 @@ class DIV_CPT{
      * @param   string|array    $name
      * @param   array           $args
      * @param   array           $labels
-     * @return  object          DIV_CPT
+     * @return  object          DS_CPT
      *
      * @author  Gijs Jorissen
      * @since   0.1
      *
      */
     function add_taxonomy( $name, $args = array(), $labels = array() ) {
-        // Call DIV_Taxonomy with this post type name as second parameter
-        $taxonomy = new DIV_Taxonomy( $name, $this->name, $args, $labels );
+        // Call DS_Taxonomy with this post type name as second parameter
+        $taxonomy = new DS_Taxonomy( $name, $this->name, $args, $labels );
         
         // For method chaining
         return $this;
@@ -131,15 +131,15 @@ class DIV_CPT{
      * @param   array           $fields
      * @param   string          $context
      * @param   string          $priority
-     * @return  object          DIV_CPT
+     * @return  object          DS_CPT
      *
      * @author  Gijs Jorissen
      * @since   0.1
      *
      */
     function add_meta_box( $id, $title, $fields = array(), $context = 'normal', $priority = 'default' ) {
-        // Call DIV_Meta_Box with this post type name as second parameter
-        $meta_box = new DIV_Meta_Box( $id, $title, $this->name, $fields, $context, $priority );
+        // Call DS_Meta_Box with this post type name as second parameter
+        $meta_box = new DS_Meta_Box( $id, $title, $this->name, $fields, $context, $priority );
         
         // For method chaining
         return $this;
@@ -149,8 +149,8 @@ class DIV_CPT{
      * Add action to register support of certain features for a post type.
      *
      * @param   string|array    $feature            The feature being added, can be an array of feature strings or a single string
-     * @return  object          DIV_CPT
-     * @uses    DIV_CPT::_add_post_type_support()
+     * @return  object          DS_CPT
+     * @uses    DS_CPT::_add_post_type_support()
      *
      * @author  Abhinav Sood
      * @since   1.4.3
@@ -179,9 +179,9 @@ class DIV_CPT{
     /**
      * Add action to remove support of certain features for a post type.
      *
-     * @param   string|array    $feature            The feature being removed, can be an array of feature strings or a single string
-     * @return  object          DIV_CPT
-     * @uses    DIV_CPT::_remove_post_type_support()
+     * @param   string|array    $feature (Feature being removed)
+     * @return  object          DS_CPT
+     * @uses    DS_CPT::_remove_post_type_support()
      * 
      * @author  Abhinav Sood
      * @since   1.4.3

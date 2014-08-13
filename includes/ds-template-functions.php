@@ -1,13 +1,12 @@
 <?php
 /**
- * DivStarter Template Functions
- *
+ * Div Starter Template Functions
  * Functions for the templating system.
  *
- * @author 		Div Truth
- * @category 	Core
- * @package 	DivStarter/Functions
  * @version     1.0
+ * @package 	DivStarter/Functions
+ * @category 	Core
+ * @author 		Div Blend Team
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -18,13 +17,13 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  * @access public
  * @return void
  */
-function div_generator_tag( $gen, $type ) {
+function ds_generator_tag( $gen, $type ) {
 	switch ( $type ) {
 		case 'html':
-			$gen .= "\n" . '<meta name="generator" content="DivStarter ' . esc_attr( DIV_VERSION ) . '">';
+			$gen .= "\n" . '<meta name="generator" content="DivStarter ' . esc_attr( DS_VERSION ) . '">';
 			break;
 		case 'xhtml':
-			$gen .= "\n" . '<meta name="generator" content="DivStarter ' . esc_attr( DIV_VERSION ) . '" />';
+			$gen .= "\n" . '<meta name="generator" content="DivStarter ' . esc_attr( DS_VERSION ) . '" />';
 			break;
 	}
 	return $gen;
@@ -67,14 +66,14 @@ if ( ! function_exists( 'divstarter_get_sidebar' ) ) {
 	 * @return void
 	 */
 	function divstarter_get_sidebar() {
-		div_get_template( 'global/sidebar.php' );
+		ds_get_template( 'global/sidebar.php' );
 	}
 }
 
 
 /** Template Functions********************************************************/
 
-if ( ! function_exists( 'div_header_logo' ) ) {
+if ( ! function_exists( 'ds_header_logo' ) ) {
 	/**
 	 * Handle redirects before content is output - hooked into template_redirect so is_page works.
 	 * TODO: This will grab a theme settings option for the header logo img
@@ -84,16 +83,16 @@ if ( ! function_exists( 'div_header_logo' ) ) {
 	 * @param string $image
 	 * @return void
 	 */
-	function div_header_logo($title,$image="/images/header-logo.png"){
+	function ds_header_logo($title,$image="/images/header-logo.png"){
 	  echo '<div class="header-logo">
 	    <img style="float:left;margin:5px;" src="'.get_stylesheet_directory_uri().$images.'"/>
 	    <h1 style="float:left;margin-top: 27px;color:#fff;">'.$title.'</h1>
 	  </div>';
 	}
-	add_action( 'div_header_logo', 'div_header_logo'); 
+	add_action( 'ds_header_logo', 'ds_header_logo'); 
 }
 
-if ( ! function_exists( 'div_copyright' ) ) {
+if ( ! function_exists( 'ds_copyright' ) ) {
 	/**
 	 * SITE COPYRIGHT
 	 * TODO: This will grab a theme settings option for the copyright text
@@ -101,17 +100,17 @@ if ( ! function_exists( 'div_copyright' ) ) {
 	 * @author Nick Worth
 	 * @return string $copyright
 	 */
-	function div_copyright(){
+	function ds_copyright(){
 	  $copyright = '&copy; '.date('Y').' '.get_bloginfo('name').' All Rights Reserved. <br>';
 	  $copyright .= 'Site designed and developed by <a href="http://www.divtruth.com" target="_blank">Div Truth LLC</a>.</p>';
 	  return $copyright;
 	}
-	add_action('div_copyright','div_copyright');
+	add_action('ds_copyright','ds_copyright');
 }
 
 /** Images ******************************************************************/
 
-if ( ! function_exists( 'div_get_attachment_id' ) ) {
+if ( ! function_exists( 'ds_get_attachment_id' ) ) {
 
 	/**
 	 * Pulls an attachment ID from a post, if one exists
@@ -122,7 +121,7 @@ if ( ! function_exists( 'div_get_attachment_id' ) ) {
 	 * @param number $num
 	 * @return number
 	 */
-	function div_get_attachment_id($num = 0) {
+	function ds_get_attachment_id($num = 0) {
 	  global $post;
 
 	  $image_ids = array_keys(
@@ -144,7 +143,7 @@ if ( ! function_exists( 'div_get_attachment_id' ) ) {
 	}
 }
 
-if ( ! function_exists( 'div_get_image' ) ) {
+if ( ! function_exists( 'ds_get_image' ) ) {
 
 	/**
 	 * Pulls an image from the media gallery and returns it
@@ -155,7 +154,7 @@ if ( ! function_exists( 'div_get_image' ) ) {
 	 * @param array $args
 	 * @return number
 	 */
-	function div_get_image($args = array()) {
+	function ds_get_image($args = array()) {
 	  global $post;
 
 	  $defaults = array(
@@ -164,12 +163,12 @@ if ( ! function_exists( 'div_get_image' ) ) {
 	    'num' => 0,
 	    'attr' => ''
 	  );
-	  $defaults = apply_filters('div_get_image_default_args', $defaults);
+	  $defaults = apply_filters('ds_get_image_default_args', $defaults);
 
 	  $args = wp_parse_args($args, $defaults);
 
 	  // Allow child theme to short-circuit this function
-	  $pre = apply_filters('div_pre_get_image', false, $args, $post);
+	  $pre = apply_filters('ds_pre_get_image', false, $args, $post);
 	  if ( false !== $pre ) return $pre;
 
 	  // Check for post image (native WP)
@@ -180,7 +179,7 @@ if ( ! function_exists( 'div_get_image' ) ) {
 	  }
 	  // else pull the first image attachment
 	  else {
-	    $id = div_get_attachment_id($args['num']);
+	    $id = ds_get_attachment_id($args['num']);
 	    $html = wp_get_attachment_image($id, $args['size'], false, $args['attr']);
 	    list($url) = wp_get_attachment_image_src($id, $args['size'], false, $args['attr']);
 	  }
@@ -203,13 +202,13 @@ if ( ! function_exists( 'div_get_image' ) ) {
 	  if ( !file_exists(ABSPATH . $src) ) $output = FALSE;
 
 	  // return data, filtered
-	  return apply_filters('div_get_image', $output, $args, $id, $html, $url, $src);
+	  return apply_filters('ds_get_image', $output, $args, $id, $html, $url, $src);
 	}
 }
 
-if ( ! function_exists( 'div_image' ) ) {
+if ( ! function_exists( 'ds_image' ) ) {
 	/**
-	 * Echo div_get_image();
+	 * Echo ds_get_image();
 	 *
 	 * @author Nick Worth
 	 * @access public
@@ -217,15 +216,15 @@ if ( ! function_exists( 'div_image' ) ) {
 	 * @param array $args
 	 * @return number
 	 */
-	function div_image($args = array()) {
-		$image = div_get_image($args);
+	function ds_image($args = array()) {
+		$image = ds_get_image($args);
 
 		if ( $image ) echo $image;
 		else return FALSE;
 	}
 }
 
-if ( ! function_exists( 'div_get_additional_image_sizes' ) ) {
+if ( ! function_exists( 'ds_get_additional_image_sizes' ) ) {
 	/**
 	 * GET ADDITIONAL IMAGE SIZES
 	 *
@@ -236,7 +235,7 @@ if ( ! function_exists( 'div_get_additional_image_sizes' ) ) {
 	 * @global array $_wp_additional_image_sizes Additionally registered image sizes
 	 * @return array Two-dimensional, with width, height and crop sub-keys
 	 */
-	function div_get_additional_image_sizes() {
+	function ds_get_additional_image_sizes() {
 	  global $_wp_additional_image_sizes;
 
 	  if ( $_wp_additional_image_sizes )
@@ -246,7 +245,7 @@ if ( ! function_exists( 'div_get_additional_image_sizes' ) ) {
 	}
 }
 
-if ( ! function_exists( 'div_get_image_sizes' ) ) {
+if ( ! function_exists( 'ds_get_image_sizes' ) ) {
 	/**
 	 * GET ALL IMAGE SIZES
 	 *
@@ -257,7 +256,7 @@ if ( ! function_exists( 'div_get_image_sizes' ) ) {
 	 * @global array $_wp_additional_image_sizes
 	 * @return array
 	 */
-	function div_get_image_sizes() {
+	function ds_get_image_sizes() {
 		$builtin_sizes = array(
 			'large'   => array(
 				'width' => get_option('large_size_w'),
@@ -273,7 +272,7 @@ if ( ! function_exists( 'div_get_image_sizes' ) ) {
 			)
 		);
 
-		$additional_sizes = div_get_additional_image_sizes();
+		$additional_sizes = ds_get_additional_image_sizes();
 
 		return array_merge( $builtin_sizes, $additional_sizes );
 	}
@@ -289,7 +288,7 @@ if ( ! function_exists( 'div_get_image_sizes' ) ) {
 
 /** Login *****************************************************************/
 
-if ( ! function_exists( 'div_login_form' ) ) {
+if ( ! function_exists( 'ds_login_form' ) ) {
 
 	/**
 	 * Output the DivStarter Login Form
@@ -298,7 +297,7 @@ if ( ! function_exists( 'div_login_form' ) ) {
 	 * @subpackage	Forms
 	 * @return void
 	 */
-	function div_login_form( $args = array() ) {
+	function ds_login_form( $args = array() ) {
 
 		$defaults = array(
 			'message'  => '',
@@ -308,7 +307,7 @@ if ( ! function_exists( 'div_login_form' ) ) {
 
 		$args = wp_parse_args( $args, $defaults  );
 
-		div_get_template( 'global/form-login.php', $args );
+		ds_get_template( 'global/form-login.php', $args );
 	}
 }
 

@@ -10,9 +10,9 @@ Documentation
 ---------
 
 #### **Div Starter**: ####
-a Wordpress plugin framework developed by [Div Truth](http://divtruth.com). Used for creating custom solutions for WordPress sites, a true **developers framework** [(more details)](http://divstarter.com/)
+a Wordpress plugin framework developed by [Div Truth](http://divtruth.com). Used for creating custom solutions for WordPress sites, a true **developers framework** [(more details)](http://divblend.com/div-starter/)
 
- - **Site App**:
+ - **Div Engine**:
 This is a Must Use plugin `/mu-plugins/`. This is the equivalent of a child relationship to the Div Starter plugin. All custom site development is created in this app specifically, while extending functionality from Div Starter.
 
 #### **Div Framework**: ####

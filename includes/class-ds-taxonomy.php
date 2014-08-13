@@ -1,19 +1,19 @@
 <?php
 /**
- * Div Starter Custom Post Type Class
+ * Div Starter Taxonomy Class
  * Creates custom taxonomies
  *
- * @class       DIV_Taxonomy
+ * @class       DS_Taxonomy
  * @author      Gijs Jorissen
  * @category    Core
  * @package     DivStarter/Classes
- * @uses        DIV_Helper
+ * @uses        DS_Helper
  * @version     1.0
  */
 
 if( ! defined( 'ABSPATH' ) ) exit;
 
-class DIV_Taxonomy{
+class DS_Taxonomy{
     var $taxonomy_name;
     var $taxonomy_labels;
     var $taxonomy_args;
@@ -38,7 +38,7 @@ class DIV_Taxonomy{
             $this->post_type_name = $post_type_name;
 
             // Taxonomy properties
-            $this->taxonomy_name        = DIV_Helper::uglify( $name );
+            $this->taxonomy_name        = DS_Helper::uglify( $name );
             $this->taxonomy_labels      = $labels;
             $this->taxonomy_args        = $args;
 
@@ -62,8 +62,8 @@ class DIV_Taxonomy{
      *
      */
     function register_taxonomy() {
-        $name       = DIV_Helper::beautify( $this->taxonomy_name );
-        $plural     = DIV_Helper::pluralize( $name );
+        $name       = DS_Helper::beautify( $this->taxonomy_name );
+        $plural     = DS_Helper::pluralize( $name );
 
         // Default labels, overwrite them with the given labels.
         $labels = array_merge(

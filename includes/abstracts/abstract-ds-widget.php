@@ -1,14 +1,14 @@
 <?php
 /**
- * Abstract Widget Class
+ * Div Starter Abstract Widget Class
  *
- * @author 		Div Truth
- * @category 	Widgets
- * @package 	DivStarter/Abstracts
  * @version 	1.0
+ * @package 	DivStarter/Abstracts
+ * @category 	Widgets
+ * @author 		Div Blend Team
  * @extends 	WP_Widget
  */
-abstract class DIV_Widget extends WP_Widget {
+abstract class DS_Widget extends WP_Widget {
 
 	public $widget_cssclass;
 	public $widget_description;
@@ -116,6 +116,7 @@ abstract class DIV_Widget extends WP_Widget {
 		if ( ! $this->settings )
 			return;
 		
+		# TODO: Complete self-generating documentation (https://app.asana.com/0/7877374858636/14410061109225)
 		$docs = '
 		<section class="divstarter-documentation" style="margin: 5px 0;">
 			<a href="#" class="button" onclick="jQuery(this).next().toggle(); return false;">Documentation</a>
@@ -207,7 +208,7 @@ abstract class DIV_Widget extends WP_Widget {
 
 		$args['instance'] = $instance;
 
-		div_get_template( 'widgets/'.$file, $args );
+		ds_get_template( 'widgets/'.$file, $args );
 
 	}
 
