@@ -346,7 +346,7 @@ final class DivStarter {
 	 * @return string
 	 */
 	public function template_path() {
-		return apply_filters( 'DS_TEMPLATE_PATH', 'div-starter/' );
+		return apply_filters( 'DS_TEMPLATE_PATH', 'starter/' );
 	}
 
 	/**
