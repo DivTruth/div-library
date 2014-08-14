@@ -116,14 +116,21 @@ abstract class DS_Widget extends WP_Widget {
 
 		if ( ! $this->settings )
 			return;
+
+		$widget = strtolower( $this->widget_id );
+		$widget = str_replace( 'divstarter_widget_', '', $widget );
+		$file = str_replace( '_', '-', $widget ) . '.php';
 		
 		# TODO: Complete self-generating documentation (https://app.asana.com/0/7877374858636/14410061109225)
 		$docs = '
 		<section class="divstarter-documentation" style="margin: 5px 0;">
 			<a href="#" class="button" onclick="jQuery(this).next().toggle(); return false;">Documentation</a>
-			<aside  style="display:none; background:#eee; margin: 5px 0px; padding: 5px;">
-				To edit the html output of this widget, copy the <strong title="(<em>i.e. /<strong>plugins</strong>/div-starter/templates/widgets/text-image.php</em>)">template</strong> into your theme under div-starter (<em>i.e. /theme/div-starter/text-image.php</em>)
-				<ul>
+			<aside  style="display:none; background:#eee; margin: 5px 0px; padding: 5px 10px;">
+				<h3 style="margin-bottom:5px;">Modify Widget Template</h3>
+				To edit the html output of this widget, copy the <strong style="margin: 5px;padding:5px;border:1px solid #c03f3f;background:#da2c2c;color: #fff;cursor:pointer;display:inline-block;" title="plugins/div-starter/templates/widgets/'.$file.'">PLUGIN TEMPLATE FILE</strong> => <strong style="margin: 5px;padding:5px;border:1px solid #c03f3f;background:#da2c2c;color: #fff;cursor:pointer; display:inline-block;" title="'.basename(get_stylesheet_directory_uri()).'/'.DS()->template_path().$file.'">THEME TEMPLATE PATH</strong>
+
+				<h3 style="margin-bottom:5px;">Varibles</h3>
+				<ul style="list-style-type: disc;padding-left: 30px;">
 		';
 
 		foreach ( $this->settings as $key => $setting ) {
@@ -185,7 +192,7 @@ abstract class DS_Widget extends WP_Widget {
 				break;
 
 			}
-			$docs .= '<li><strong>$'.$key.'</strong> - '.$setting['label'].'</li>';
+			$docs .= '<li><strong>$'.$key.'</strong></li>';
 		}
 
 		$docs .= '</ul></aside></section>';
