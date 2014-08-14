@@ -29,7 +29,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 function ds_get_template_part( $slug, $name = '' ) {
 	$template = '';
 
-	# Look in yourtheme/slug-name.php and yourtheme/divstarter/slug-name.php
+	# First Look: yourtheme/slug-name.php
+	# Second Look: yourtheme/starter/slug-name.php
 	if ( $name ) {
 		$template = locate_template( array( "{$slug}-{$name}.php", DS()->template_path() . "{$slug}-{$name}.php" ) );
 	}
@@ -45,7 +46,7 @@ function ds_get_template_part( $slug, $name = '' ) {
 	}
 
 	# Allow 3rd party plugin filter template file from their plugin
-	$template = apply_filters( 'wc_get_template_part', $template, $slug, $name );
+	$template = apply_filters( 'ds_get_template_part', $template, $slug, $name );
 
 	if ( $template ) {
 		load_template( $template, false );
