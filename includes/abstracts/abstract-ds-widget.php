@@ -30,14 +30,15 @@ abstract class DS_Widget extends WP_Widget {
 		add_action( 'save_post', array( $this, 'flush_widget_cache' ) );
 		add_action( 'deleted_post', array( $this, 'flush_widget_cache' ) );
 		add_action( 'switch_theme', array( $this, 'flush_widget_cache' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_widget_js') );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_widget_scripts') );
 	}
 
 	/**
-	 * enqueue js on widgets.php function.
+	 * enqueue scripts on widgets.php function.
 	 */
-	function admin_widget_js( $hook ) {
+	function admin_widget_scripts( $hook ) {
 		if ( 'widgets.php' == $hook ) {
+			wp_enqueue_style( 'ds_admin_styles', DS_CSS_URL.'ds_widget.css' );
 			wp_enqueue_script( 'jquery-ui-tooltip' );
 		}
 	}
@@ -209,7 +210,6 @@ abstract class DS_Widget extends WP_Widget {
 		$args['instance'] = $instance;
 
 		ds_get_template( 'widgets/'.$file, $args );
-
 	}
 
 }

@@ -2,12 +2,14 @@
 /**
  * Banner Widget Template
  *
- * @author 		Div Truth
- * @package 	DivStarter/Templates/Widgets
  * @version     1.0
+ * @package 	DivStarter/Templates/Widgets
+ * @author 		Div Blend Team
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+if ( empty($instance) ) return; // No instance vars (customizer instance)
 
 extract($args);
 extract($instance);
@@ -26,7 +28,7 @@ echo $before_widget;
 		echo '<div style="max-width:'.$banner[1].'px; max-height:'.$banner[2].'px; margin:auto;" class="widget_banner_content">';
 
 			echo '<a href="'.$link.'" target="'.$target.'">
-	    	    <img src="'.$banner[0].'" class="fit" alt="'.$link.'">
+	    	    <img src="'.$banner[0].'" class="fit" alt="'.$title.' image">
 		    </a>';
 			
 		echo '</div>';
