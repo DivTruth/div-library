@@ -236,10 +236,9 @@ final class DivStarter {
 
 		// Classes (used on all pages)
 		include_once( 'includes/class-ds-helper.php' );			# Power tools for data manipluation
-		include_once( 'includes/class-ds-debug.php' );			# Debug methods for troubleshooting
 		include_once( 'includes/class-ds-taxonomy.php' );		# For creating Custom taxonomies
 		include_once( 'includes/class-ds-cpt.php' );			# For creating Custom Post Types
-		include_once( 'includes/class-ds-user.php' );			# For creating Custom User Types
+		include_once( 'includes/class-ds-roles.php' );			# For creating Custom User Types
 
 		// Include template hooks in time for themes to remove/modify them
 		include_once( 'includes/ds-template-hooks.php' );
