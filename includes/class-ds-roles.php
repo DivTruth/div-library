@@ -1,6 +1,6 @@
 <?php
 /**
- * DS_Role class.
+ * DS_Role class
  * Manage user permissions, roles and other user-based functionality for development
  *
  * @class 		DS_Role
@@ -15,9 +15,8 @@ if( ! defined( 'ABSPATH' ) ) exit;
 
 class DS_Role {
 
-	public $name;
-	public $display_name;
-	public $capabilities;
+	#store all non-standard roles
+	public $roles;
 
 	/**
 	 * Constructor
@@ -25,13 +24,20 @@ class DS_Role {
 	 * @param string|array $name
 	 * @param string $display_name
 	 * @param string|array $capabilities
+	 * @return array $roles
 	 */
 	public function __construct($name, $display_name = "", $capabilities = "") {
+		$roles = $this->get_roles();
+
 		if( ! empty( $name ) ) {
-            $this->name     		= $name;
-            $this->display_name 	= ( $display_name ) ? $display_name : DS_Helper::beautify( $name );
-            $this->capabilities 	= $this->setup_capabilities();
-    		$this->register_role();
+			if( is_array( $name ) ) {
+				$this->register_roles($name);
+			} else {
+	            $name     		= $name;
+	            $display_name 	= ( $display_name ) ? $display_name : DS_Helper::beautify( $name );
+	            $capabilities 	= self::setup_capabilities($capabilities);
+	    		$this->register_role($name,$display_name,$capabilities);
+	    	}
 		}
 	}
 
@@ -40,17 +46,12 @@ class DS_Role {
 	 * @access public
 	 * @return array of user_objects
 	 */
-	static function register_roles($name){
-		if( is_array( $name ) ) {
-			foreach ($name as $n => $args) {
-	            $name 			= DS_Helper::uglify( $n );
-	            $display_name 	= DS_Helper::beautify( $n );
-	            $capabilities 	= self::setup_capabilities($args['capabilities']);
-				$roles[$name] 	= new DS_Role($name,$display_name,$capabilities);
-			}
-			return $roles;
-		} else {
-			return false;
+	function register_roles($name){
+		foreach ($name as $n => $args) {
+            $role 			= DS_Helper::uglify( $n );
+            $display_name 	= ( !empty($args['display_name']) ) ? $args['display_name'] : DS_Helper::beautify( $n );
+            $capabilities 	= self::setup_capabilities($args['capabilities']);
+			$this->register_role($role,$display_name,$capabilities);
 		}
 	}
 
@@ -59,10 +60,9 @@ class DS_Role {
 	 * @access public
 	 * @return user_object
 	 */
-	public function register_role(){
-		remove_role($this->name);
-		$default_role = apply_filters( 'ds_default_role', get_option( 'default_role', 'subscriber' ) );
-        return $user_type = add_role( $this->name, $this->display_name, $this->capabilities);
+	public function register_role($role,$display_name,$capabilities){
+		remove_role($role);
+        $this->roles[$role] = add_role( $role,$display_name,$capabilities);
 	}
 
 	/**
@@ -75,23 +75,60 @@ class DS_Role {
 		// Set default clone permissions in General Settings or with 'ds_default_role' filter
 		$default_role = apply_filters( 'ds_default_role', get_option( 'default_role', 'subscriber' ) );
 
+		// If array, look for inherited roles, and setup any custom capabilities
+        if (  is_array($c) ) {
+	        // Check for inherited roles
+	        foreach ($c as $capability => $v) {
+				$roles = self::get_roles(1);
+				$admin_role = get_role('administrator');
+
+				if(in_array($capability, $roles)){
+					unset($c[$capability]); //remove role
+					
+					// Add role's capabilities
+					$inherited = get_role($capability)->capabilities;
+					$c['inherited'] = $capability;
+					$c = array_merge($c, $inherited);
+				} else {
+					if(!array_key_exists ( $capability, $admin_role->capabilities)){
+						$admin_role->add_cap($capability);
+					}
+				}
+			}
+		}
+
+		// If not provided or string, then inherit capabilities from default or declared role
 		if ( empty($c) || is_string($c)) {
-        	global $wp_roles; if ( ! isset( $wp_roles ) ) $wp_roles = new WP_Roles();
-        	$default = ( !empty($c) ) ? $wp_roles->get_role($c) : $wp_roles->get_role($default_role);
-        	// $this->cloned = $default->name;
+        	$default = ( empty($c) ) ? get_role($default_role) : get_role($c);
         	$c = $default->capabilities;
+        	$c['inherited'] = $default->name;
         }
+        
        	return $c;
 	}
 
 	/**
-	 * Setup the capabilities array
+	 * Add the capabilities to defined roles
 	 * @access public
 	 * @param string/array
-	 * @return array
 	 */
 	public function add_cap($c){
-		$this->role->add_cap();
+		$admin_role = get_role('administrator');
+		$admin_role->add_cap($c);
+		foreach ($this->roles as $name => $role) {
+			$role->add_cap($c);
+		}
+	}
+
+	/**
+	 * Remove capabilities from defined roles
+	 * @access public
+	 * @param string/array
+	 */
+	public function remove_cap($c){
+		foreach ($this->roles as $name => $role) {
+			$role->remove_cap($c);
+		}
 	}
 
 	/**
@@ -128,33 +165,3 @@ class DS_Role {
 	}
 
 }
-
-$caps = array(
-	'read' 		=> 1,
-	'level_0'	=> 1,
-	'level_1'	=> 1,
-);
-
-$roles = array(
-	'guest' 		=> array(
-		'capabilities'	=> 'subscriber'
-	),
-	'tech'			=> array(
-		'display_name'	=> 'RR Technician',
-		'capabilities'	=> $caps
-	),
-	'web_master' 	=> array(
-		'display_name'	=> 'Web Master',
-		'capabilities'	=> 'administrator'
-	),
-);
-
-// $rr_technician = new DS_Role('peasant');
-// DS_Print::object($rr_technician);
-
-$rr_roles = DS_Role::register_roles($roles);
-// $rr_technician->add_cap('test_cap');
-DS_Print::object($rr_roles);
-
-
-// DS_Role::clear_roles();
