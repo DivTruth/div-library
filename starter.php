@@ -119,6 +119,7 @@ final class DivStarter {
 		add_action( 'init', array( $this, 'init' ), 0 );
 		add_action( 'init', array( $this, 'include_template_functions' ) );
 		add_action( 'init', array( 'DS_Shortcodes', 'init' ) );
+		add_filter( 'admin_footer_text', array( $this, 'ds_admin_footer'), 9999 );
 		
 		// Register ACF Add-on Fields
 		add_action( 'acf/register_fields', array( $this, 'ds_register_acf_fields' ) );
@@ -346,6 +347,19 @@ final class DivStarter {
 	 */
 	public function template_path() {
 		return apply_filters( 'DS_TEMPLATE_PATH', 'starter/' );
+	}
+
+	/**
+	 * Custom Backend Footer
+	 *
+	 * @param string
+	 */
+	# 
+	public function ds_admin_footer($s) {
+	    $ds_footer = apply_filters( 'ds_admin_footer', '<span id="footer-thankyou">'.$s.'<br/>
+	    	Developed with <a href="http://www.divblend.com/div-starter" target="_blank">Div Starter</a> (version '.DS_VERSION.')
+	    </span>');
+	    _e($ds_footer, 'div-starter');
 	}
 
 	/**
