@@ -121,10 +121,6 @@ final class DivStarter {
 		add_action( 'init', array( 'DS_Shortcodes', 'init' ) );
 		add_filter( 'admin_footer_text', array( $this, 'ds_admin_footer'), 9999 );
 		
-		// Register ACF Add-on Fields
-		add_action( 'acf/register_fields', array( $this, 'ds_register_acf_fields' ) );
-		add_action( 'acf_settings', array( $this, 'ds_acf_settings' ) );
-		
 		// Setup any theme environment settings
 		add_action( 'after_setup_theme', array( $this, 'setup_environment' ) );
 
@@ -303,21 +299,6 @@ final class DivStarter {
 	 */
 	public function setup_environment() {
 
-	}
-
-	public function ds_register_acf_fields(){  
-		#ACF 4.0+ Add ons
-	    include_once($this->plugin_path().'/includes/fields/acf-repeater/repeater.php');                                  #FIELD: Repeater
-	    include_once($this->plugin_path().'/includes/fields/acf-gallery/gallery.php');                                    #FIELD: Gallery
-	}
-	public function ds_acf_settings( $options ){
-	    // activate add-ons
-	    //TODO: Need to store in DB
-	    $options['activation_codes']['repeater'] = 'QJF7-L4IX-UCNP-RF2W';
-	    $options['activation_codes']['options_page'] = 'OPN8-FA4J-Y2LW-81LS';
-	    $options['activation_codes']['gallery'] = 'GF72-8ME6-JS15-3PZC';
-	    //$options['activation_codes']['flexible_content'] = 'XXXX';
-	    return $options;
 	}
 
 	/** Helper functions ******************************************************/
