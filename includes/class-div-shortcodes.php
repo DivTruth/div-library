@@ -1,18 +1,18 @@
 <?php
 /**
- * DS_Shortcodes class.
- * All Div Starter shortcodes will be added here by their respectice classes
+ * DIV_Shortcodes class.
+ * Shortcodes will be added here by their respectice classes
  *
- * @class 		DS_Shortcodes
+ * @class 		DIV_Shortcodes
  * @version		1.0
- * @package		DivStarter/Classes
+ * @package		Div_Library/Classes
  * @category	Class
  * @author 		Div Blend Team
  */
 
 if( ! defined( 'ABSPATH' ) ) exit;
 
-class DS_Shortcodes {
+class DIV_Shortcodes {
 
 	/**
 	 * Init shortcodes
@@ -44,7 +44,7 @@ class DS_Shortcodes {
 		$function,
 		$atts    = array(),
 		$wrapper = array(
-			'class'  => 'divstarter shortcode',
+			'class'  => 'divlibrary shortcode',
 			'before' => null,
 			'after'  => null
 		)
@@ -59,39 +59,6 @@ class DS_Shortcodes {
 		echo $after;
 
 		return ob_get_clean();
-	}
-
-	/**
-	 * Utils Google Chart Viewer Shortcodes.
-	 *
-	 * @access public
-	 * @param mixed $atts
-	 * @return string
-	 */
-	public static function chart( $atts ) {
-		return self::shortcode_wrapper( array( 'DS_Shortcode_Utils', 'chart' ), $atts );
-	}
-
-	/**
-	 * Utils Download Shortcodes.
-	 *
-	 * @access public
-	 * @param mixed $atts
-	 * @return string
-	 */
-	public static function download( $atts ) {
-		return self::shortcode_wrapper( array( 'DS_Shortcode_Download', 'output' ), $atts );
-	}
-
-	/**
-	 * Utils Google PDF Viewer Shortcodes.
-	 *
-	 * @access public
-	 * @param mixed $atts
-	 * @return string
-	 */
-	public static function pdf( $atts ) {
-		return self::shortcode_wrapper( array( 'DS_Shortcode_Utils', 'pdf' ), $atts );
 	}
 
 }

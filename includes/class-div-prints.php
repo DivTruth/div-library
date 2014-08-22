@@ -1,25 +1,27 @@
 <?php
 /**
- * DS_Print class
+ * DIV_Print class
  * Used to print out settings, shortcodes, enqued scripts & styles, etc.
  *
- * @class       DS_Print
+ * @class       DIV_Print
+ * @uses        DIV()
  * @version     1.0
- * @package     DivStarter/Classes
+ * @package     Div_Library/Classes
  * @category    Class
  * @author      Div Blend Team
  */
 
 if( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'DS_Print' ) ) :
+if ( ! class_exists( 'DIV_Print' ) ) :
 
-class DS_Print{
+class DIV_Print{
 
     function __construct() {}
 
     /**
      * Print all registered or enqued scripts
+     * @example DIV()->print->scripts();
      *
      * @param boolean (enqueued)
      * @return string
@@ -34,6 +36,7 @@ class DS_Print{
 
     /**
      * Print all registered or enqued styles
+     * @example DIV()->print->styles();
      *
      * @param boolean (enqueued)
      * @return string
@@ -48,6 +51,7 @@ class DS_Print{
 
     /**
      * Print all available shortcodes
+     * @example DIV()->print->shortcodes();
      *
      * @return string
      */
@@ -62,7 +66,7 @@ class DS_Print{
      * @param object or array
      * @return string
      */
-    public static function object($array){
+    public static function obj($array){
         echo "<pre>"; print_r($array); echo "</pre>";
     }
 

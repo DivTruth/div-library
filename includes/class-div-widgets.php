@@ -1,20 +1,21 @@
 <?php
 /**
- * Div Starter Abstract Widget Class
+ * Div Library Widget Class
  *
  * @version 	1.0
- * @package 	DivStarter/Abstracts
- * @category 	Widgets
+ * @package 	Div_Library/Classes
+ * @category 	Class
  * @author 		Div Blend Team
  * @extends 	WP_Widget
  */
-abstract class DS_Widget extends WP_Widget {
+abstract class DIV_Widget extends WP_Widget {
 
 	public $widget_cssclass;
 	public $widget_description;
 	public $widget_id;
 	public $widget_name;
 	public $settings;
+	public $widget_template = "/templates/widgets/{widget}.php";
 
 	/**
 	 * Constructor
@@ -38,7 +39,7 @@ abstract class DS_Widget extends WP_Widget {
 	 */
 	function admin_widget_scripts( $hook ) {
 		if ( 'widgets.php' == $hook ) {
-			wp_enqueue_style( 'ds_admin_styles', DS_CSS_URL.'ds_widget.css' );
+			wp_enqueue_style( 'div_admin_styles', DIV()->path['css_url'].'div_widget.css' );
 			wp_enqueue_script( 'jquery-ui-tooltip' );
 		}
 	}
@@ -118,16 +119,16 @@ abstract class DS_Widget extends WP_Widget {
 			return;
 
 		$widget = strtolower( $this->widget_id );
-		$widget = str_replace( 'divstarter_widget_', '', $widget );
+		$widget = str_replace( 'divlibrary_widget_', '', $widget );
 		$file = str_replace( '_', '-', $widget ) . '.php';
 		
 		# TODO: Complete self-generating documentation (https://app.asana.com/0/7877374858636/14410061109225)
 		$docs = '
-		<section class="divstarter-documentation" style="margin: 5px 0;">
+		<section class="divlibrary-documentation" style="margin: 5px 0;">
 			<a href="#" class="button" onclick="jQuery(this).next().toggle(); return false;">Documentation</a>
 			<aside  style="display:none; background:#eee; margin: 5px 0px; padding: 5px 10px;">
 				<h3 style="margin-bottom:5px;">Modify Widget Template</h3>
-				To edit the html output of this widget, copy the <strong style="margin: 5px;padding:5px;border:1px solid #c03f3f;background:#da2c2c;color: #fff;cursor:pointer;display:inline-block;" title="plugins/div-starter/templates/widgets/'.$file.'">PLUGIN TEMPLATE FILE</strong> => <strong style="margin: 5px;padding:5px;border:1px solid #c03f3f;background:#da2c2c;color: #fff;cursor:pointer; display:inline-block;" title="'.basename(get_stylesheet_directory_uri()).'/'.DS()->template_path().$file.'">THEME TEMPLATE PATH</strong>
+				To edit the html output of this widget, copy the <strong style="margin: 5px;padding:5px;border:1px solid #c03f3f;background:#da2c2c;color: #fff;cursor:pointer;display:inline-block;" title="'.$this->widget_template.'">TEMPLATE FILE</strong> => <strong style="margin: 5px;padding:5px;border:1px solid #c03f3f;background:#da2c2c;color: #fff;cursor:pointer; display:inline-block;" title="'.basename(get_stylesheet_directory_uri()).'/'.DIV()->template_path().$file.'">THEME TEMPLATE PATH</strong>
 
 				<h3 style="margin-bottom:5px;">Varibles</h3>
 				<ul style="list-style-type: disc;padding-left: 30px;">
@@ -196,7 +197,7 @@ abstract class DS_Widget extends WP_Widget {
 		}
 
 		$docs .= '</ul></aside></section>';
-		echo $docs;
+		echo apply_filters( 'div_widget_documentation', $docs );
 	}
 
 	/**
@@ -211,12 +212,12 @@ abstract class DS_Widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 
 		$widget = strtolower( $this->widget_id );
-		$widget = str_replace( 'divstarter_widget_', '', $widget );
+		$widget = str_replace( 'divlibrary_widget_', '', $widget );
 		$file = str_replace( '_', '-', $widget ) . '.php';
 
 		$args['instance'] = $instance;
 
-		ds_get_template( 'widgets/'.$file, $args );
+		div_get_template( 'widgets/'.$file, $args );
 	}
 
 }

@@ -1,18 +1,18 @@
 <?php 
 /**
- * Div Starter DS_Browser
+ * Div Library DIV_Detection
  * Browser & Device Detection Handler
  *
- * @class       DS_Detection
+ * @class       DIV_Detection
  * @version     1.0
- * @package     DivStarter/Classes
+ * @package     Div_Library/Classes
  * @category    Class
  * @author      Div Blend Team
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class DS_Detection {
+class DIV_Detection {
 
     /** @var array Array of browser/device classes */
     var $classes = array();
