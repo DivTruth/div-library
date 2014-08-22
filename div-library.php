@@ -3,7 +3,7 @@
  * Plugin Name: Div Library
  * Plugin URI: http://divblend.com/div-library/
  * Description: A powerful, indispensable, library of extendable tools and classes for theme developers who build custom WordPress solutions. Custom Post Type (CPT), Widget, Shortcode, User Role, and other classes making development more effecient. <strong>WARNING:</strong> Deactivating could have negative effects on your site if other active or "Must Use" plugins are using this library.
- * Version: 0.1 (alpha)
+ * Version: 0.2.0 (alpha)
  * Author: Div Blend Team
  * Author URI: http://divblend.com/div-blend-contributors/
  * Requires at least: 3.8
@@ -209,7 +209,7 @@ final class Div_Library {
 		$this->user_agent 	= new DIV_Detection();		# Detection class
 
 		// Init action
-		do_action( 'divlibrary_init' );
+		do_action( 'divlibrary_init', $this );
 	}
 
 	/** Helper functions ******************************************************/
@@ -247,11 +247,6 @@ if(class_exists('Div_Library')){
 	// Installation and uninstallation hooks
 	register_activation_hook(__FILE__, array('Div_Library', 'activate'));
 	register_deactivation_hook(__FILE__, array('Div_Library', 'deactivate'));
- 
-	// instantiate the plugin class
-	function DIV() {
-		return new Div_Library;
-	}
 
-	DIV();
+	$div = new Div_Library;
 }
