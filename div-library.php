@@ -3,7 +3,7 @@
  * Plugin Name: Div Library
  * Plugin URI: http://divblend.com/div-library/
  * Description: A powerful, indispensable, library of extendable tools and classes for theme developers who build custom WordPress solutions. Custom Post Type (CPT), Widget, Shortcode, User Role, and other classes making development more effecient. <strong>WARNING:</strong> Deactivating could have negative effects on your site if other active or "Must Use" plugins are using this library.
- * Version: 0.2.0 (alpha)
+ * Version: 0.2.1 (alpha)
  * Author: Div Blend Team
  * Author URI: http://divblend.com/div-blend-contributors/
  * Requires at least: 3.8
@@ -45,6 +45,59 @@ final class Div_Library {
 	public $user_agent = null;
 
 	/**
+	 * @var Div_Library The single instance of the class
+	 * @since 1.0
+	 */
+	protected static $_instance = null;
+
+	/**
+	 * Main Div_Library Instance
+	 *
+	 * Ensures only one instance of Div_Library is loaded or can be loaded.
+	 *
+	 * @since 1.0
+	 * @static
+	 * @see DIV()
+	 * @return Div_Library - Main instance
+	 */
+	public static function instance() {
+		if ( is_null( self::$_instance ) ) {
+			self::$_instance = new self();
+		}
+		return self::$_instance;
+	}
+
+	/**
+	 * Cloning is forbidden.
+	 *
+	 * @since 1.0
+	 */
+	public function __clone() {
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'divlibrary' ), $this->version );
+	}
+
+	/**
+	 * Unserializing instances of this class is forbidden.
+	 *
+	 * @since 1.0
+	 */
+	public function __wakeup() {
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'divlibrary' ), $this->version );
+	}
+
+	/**
+	 * Auto-load in-accessible properties on demand.
+	 *
+	 * @param mixed $key
+	 * @return mixed
+	 */
+	public function __get( $key ) {
+		if ( method_exists( $this, $key ) ) {
+			return $this->$key();
+		}
+	}
+
+	/**
 	 * Div_Library Constructor.
 	 * @since   1.0
 	 * @access public
@@ -58,7 +111,7 @@ final class Div_Library {
 
 		spl_autoload_register( array( $this, 'autoload' ) );
 
-		// Define path constants
+		// Define path variables
 		$this->define_paths();
 
 		// Include required files
@@ -66,13 +119,11 @@ final class Div_Library {
 
 		// Hooks
 		add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'action_links' ) );
-		add_action( 'plugins_loaded', array( $this, 'include_fields' ) );
-		add_action( 'widgets_init', array( $this, 'include_widgets' ) );
 		add_action( 'init', array( $this, 'init' ), 0 );
-		add_action( 'init', array( 'DIV_Shortcodes', 'init' ), 10 );
+		// add_action( 'init', array( 'DIV_Shortcodes', 'init' ), 10 );
 
 		// Div Library loading complete
-		do_action( 'divlibrary_loaded' );
+		do_action( 'divlibrary_loaded', $this );
 	}
 
 	/**
@@ -170,6 +221,10 @@ final class Div_Library {
 		include_once( 'includes/class-div-detection.php' );		# Browser/Device Detection class
 		include_once( 'includes/class-div-shortcodes.php' );	# Shortcodes class
 
+		// PCO Image Widget Field - by: PeytzCo, Compute, jamesbonham
+		include_once( 'includes/fields/image-widget-field/pco-image-widget-field.php' );
+		include_once( 'includes/class-div-widgets.php' );		# For creating custom widgets
+
 		if ( is_admin() ) {
 			#TODO: include_once( 'includes/admin/class-wc-admin.php' );
 		}
@@ -180,21 +235,7 @@ final class Div_Library {
 		include_once( 'includes/class-div-taxonomy.php' );		# For creating Custom taxonomies
 		include_once( 'includes/class-div-cpt.php' );			# For creating Custom Post Types
 		include_once( 'includes/class-div-roles.php' );			# For creating Custom User Types
-	}
-	
-	/**
-	 * Include core fields
-	 */
-	public function include_fields() {
-		// PCO Image Widget Field - by: PeytzCo, Compute, jamesbonham
-		include_once( 'includes/fields/image-widget-field/pco-image-widget-field.php' );
-	}
 
-	/**
-	 * Include widget library
-	 */
-	public function include_widgets() {
-		include_once( 'includes/class-div-widgets.php' );
 	}
 
 	/**
@@ -204,12 +245,8 @@ final class Div_Library {
 		// Before init action
 		do_action( 'before_divlibrary_init' );
 
-		// Load Class instances
-		$this->print 		= new DIV_Print();			# Detection class
-		$this->user_agent 	= new DIV_Detection();		# Detection class
-
 		// Init action
-		do_action( 'divlibrary_init', $this );
+		do_action( 'divlibrary_init' );
 	}
 
 	/** Helper functions ******************************************************/
@@ -243,10 +280,16 @@ final class Div_Library {
 
 }
 
+/**
+ * Returns the main instance of DIV to prevent the need to use globals.
+ *
+ * @since  1.0
+ * @return Div_Library
+ */
 if(class_exists('Div_Library')){
 	// Installation and uninstallation hooks
 	register_activation_hook(__FILE__, array('Div_Library', 'activate'));
 	register_deactivation_hook(__FILE__, array('Div_Library', 'deactivate'));
 
-	$div = new Div_Library;
+	Div_Library::instance(); #singleton
 }
