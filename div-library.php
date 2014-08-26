@@ -291,5 +291,8 @@ if(class_exists('Div_Library')){
 	register_activation_hook(__FILE__, array('Div_Library', 'activate'));
 	register_deactivation_hook(__FILE__, array('Div_Library', 'deactivate'));
 
-	Div_Library::instance(); #singleton
+	function DIV(){
+		return Div_Library::instance(); #singleton
+	}
+	DIV();
 }

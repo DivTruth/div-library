@@ -21,7 +21,6 @@ abstract class DIV_Widget extends WP_Widget {
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->library = Div_Library::instance();
 		$widget_ops = array(
 			'classname'   => $this->widget_cssclass,
 			'description' => $this->widget_description
@@ -40,7 +39,7 @@ abstract class DIV_Widget extends WP_Widget {
 	 */
 	function admin_widget_scripts( $hook ) {
 		if ( 'widgets.php' == $hook ) {
-			wp_enqueue_style( 'div_admin_styles', $this->library->path['css_url'].'div_widget.css' );
+			wp_enqueue_style( 'div_admin_styles', DIV()->path['css_url'].'div_widget.css' );
 			wp_enqueue_script( 'jquery-ui-tooltip' );
 		}
 	}
@@ -128,7 +127,7 @@ abstract class DIV_Widget extends WP_Widget {
 			<a href="#" class="button" onclick="jQuery(this).next().toggle(); return false;">Documentation</a>
 			<aside  style="display:none; background:#eee; margin: 5px 0px; padding: 5px 10px;">
 				<h3 style="margin-bottom:5px;">Modify Widget Template</h3>
-				To edit the html output of this widget, copy the <strong style="margin: 5px;padding:5px;border:1px solid #c03f3f;background:#da2c2c;color: #fff;cursor:pointer;display:inline-block;" title="'.$this->widget_template.'">TEMPLATE FILE</strong> => <strong style="margin: 5px;padding:5px;border:1px solid #c03f3f;background:#da2c2c;color: #fff;cursor:pointer; display:inline-block;" title="'.basename(get_stylesheet_directory_uri()).'/'.$this->app->library->template_path().$file.'">'.DIV_Helper::beautify($this->app->name).' PATH</strong>
+				To edit the html output of this widget, copy the <strong style="margin: 5px;padding:5px;border:1px solid #c03f3f;background:#da2c2c;color: #fff;cursor:pointer;display:inline-block;" title="'.$this->widget_template.'">TEMPLATE FILE</strong> => <strong style="margin: 5px;padding:5px;border:1px solid #c03f3f;background:#da2c2c;color: #fff;cursor:pointer; display:inline-block;" title="'.basename(get_stylesheet_directory_uri()).'/'.DIV()->template_path().$file.'">TEMPLATE PATH</strong>
 
 				<h3 style="margin-bottom:5px;">Varibles</h3>
 				<ul style="list-style-type: disc;padding-left: 30px;">
