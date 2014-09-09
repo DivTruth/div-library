@@ -20,10 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Main Div_Library Class
- * @class Div_Library
+ * Main div_library Class
+ * @class div_library
  */
-final class Div_Library {
+final class div_library {
 
 	/**
 	 * @var 	string
@@ -32,7 +32,6 @@ final class Div_Library {
 	public $version = '0.1';
 
 	/**
-	 * Path Definitions
 	 * @var 	array
 	 * @since   1.0
 	 */
@@ -45,20 +44,19 @@ final class Div_Library {
 	public $user_agent = null;
 
 	/**
-	 * @var Div_Library The single instance of the class
+	 * @var div_library The single instance of the class
 	 * @since 1.0
 	 */
 	protected static $_instance = null;
 
 	/**
-	 * Main Div_Library Instance
-	 *
-	 * Ensures only one instance of Div_Library is loaded or can be loaded.
+	 * Main div_library Instance
+	 * Ensures only one instance of div_library is loaded or can be loaded.
 	 *
 	 * @since 1.0
 	 * @static
-	 * @see DIV()
-	 * @return Div_Library - Main instance
+	 * @see $library()
+	 * @return div_library - Main instance
 	 */
 	public static function instance() {
 		if ( is_null( self::$_instance ) ) {
@@ -98,10 +96,10 @@ final class Div_Library {
 	}
 
 	/**
-	 * Div_Library Constructor.
+	 * div_library Constructor.
 	 * @since   1.0
 	 * @access public
-	 * @return Div_Library
+	 * @return div_library
 	 */
 	public function __construct() {
 		// Auto-load classes on demand. This effectively creates a queue of autoload functions, and runs through each of them in the order they are defined.
@@ -156,13 +154,13 @@ final class Div_Library {
 	 */
 	public function action_links( $links ) {
 		return array_merge( array(
-			'<a href="' . admin_url( 'admin.php?page=div-settings' ) . '">' . __( 'Settings', 'divlibrary' ) . '</a>',
+			// '<a href="' . admin_url( 'admin.php?page=div-settings' ) . '">' . __( 'Settings', 'divlibrary' ) . '</a>',
 			'<a href="' . esc_url( apply_filters( 'divlibrary_docs_url', 'http://www.divblend.com/div-library', 'divlibrary' ) ) . '">' . __( 'Documentation', 'divlibrary' ) . '</a>'
 		), $links );
 	}
 
 	/**
-	 * Auto-load Div_Library classes on demand to reduce memory consumption.
+	 * Auto-load div_library classes on demand to reduce memory consumption.
 	 * TODO: Determine if autoload is necessary/possible in the library
 	 * @since   1.0
 	 * @param 	mixed $class
@@ -239,7 +237,7 @@ final class Div_Library {
 	}
 
 	/**
-	 * Init Div_Library when WordPress Initialises.
+	 * Init div_library when WordPress Initialises.
 	 */
 	public function init() {
 		// Before init action
@@ -281,18 +279,15 @@ final class Div_Library {
 }
 
 /**
- * Returns the main instance of DIV to prevent the need to use globals.
+ * Returns the main instance of div_library to prevent the need to use globals.
  *
  * @since  1.0
- * @return Div_Library
+ * @return div_library
  */
-if(class_exists('Div_Library')){
+if(class_exists('div_library')){
 	// Installation and uninstallation hooks
-	register_activation_hook(__FILE__, array('Div_Library', 'activate'));
-	register_deactivation_hook(__FILE__, array('Div_Library', 'deactivate'));
+	register_activation_hook(__FILE__, array('div_library', 'activate'));
+	register_deactivation_hook(__FILE__, array('div_library', 'deactivate'));
 
-	function DIV(){
-		return Div_Library::instance(); #singleton
-	}
-	DIV();
+	return $library = div_library::instance(); #singleton
 }
