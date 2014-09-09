@@ -4,7 +4,6 @@
  * Used to print out settings, shortcodes, enqued scripts & styles, etc.
  *
  * @class       DIV_Print
- * @uses        DIV()
  * @version     1.0
  * @package     Div_Library/Classes
  * @category    Class
@@ -21,7 +20,7 @@ class DIV_Print{
 
     /**
      * Print all registered or enqued scripts
-     * @example DIV()->print->scripts();
+     * @example DIV_Print::scripts();
      *
      * @param boolean (enqueued)
      * @return string
@@ -36,7 +35,7 @@ class DIV_Print{
 
     /**
      * Print all registered or enqued styles
-     * @example DIV()->print->styles();
+     * @example DIV_Print::styles();
      *
      * @param boolean (enqueued)
      * @return string
@@ -51,7 +50,7 @@ class DIV_Print{
 
     /**
      * Print all available shortcodes
-     * @example DIV()->print->shortcodes();
+     * @example DIV_Print::shortcodes();
      *
      * @return string
      */
@@ -61,7 +60,8 @@ class DIV_Print{
     }
 
     /**
-     * Print object
+     * Print object or array
+     * @example DIV_Print::obj();
      *
      * @param object or array
      * @return string
