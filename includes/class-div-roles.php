@@ -1,19 +1,19 @@
 <?php
 /**
- * DS_Role class
+ * DIV_Role class
  * Manage user permissions, roles and other user-based functionality for development
  *
- * @class 		DS_Role
+ * @class 		DIV_Role
  * @version		1.0
  * @package		DivStarter/Classes
  * @category	Class
- * @uses        DS_Helper
+ * @uses        DIV_Helper
  * @author 		Div Blend Team
  */
 
 if( ! defined( 'ABSPATH' ) ) exit;
 
-class DS_Role {
+class DIV_Role {
 
 	#store all non-standard roles
 	public $roles;
@@ -34,7 +34,7 @@ class DS_Role {
 				$this->register_roles($name);
 			} else {
 	            $name     		= $name;
-	            $display_name 	= ( $display_name ) ? $display_name : DS_Helper::beautify( $name );
+	            $display_name 	= ( $display_name ) ? $display_name : DIV_Helper::beautify( $name );
 	            $capabilities 	= self::setup_capabilities($capabilities);
 	    		$this->register_role($name,$display_name,$capabilities);
 	    	}
@@ -48,8 +48,8 @@ class DS_Role {
 	 */
 	function register_roles($name){
 		foreach ($name as $n => $args) {
-            $role 			= DS_Helper::uglify( $n );
-            $display_name 	= ( !empty($args['display_name']) ) ? $args['display_name'] : DS_Helper::beautify( $n );
+            $role 			= DIV_Helper::uglify( $n );
+            $display_name 	= ( !empty($args['display_name']) ) ? $args['display_name'] : DIV_Helper::beautify( $n );
             $capabilities 	= self::setup_capabilities($args['capabilities']);
 			$this->register_role($role,$display_name,$capabilities);
 		}
@@ -72,8 +72,8 @@ class DS_Role {
 	 * @return array
 	 */
 	static function setup_capabilities($c=""){
-		// Set default clone permissions in General Settings or with 'ds_default_role' filter
-		$default_role = apply_filters( 'ds_default_role', get_option( 'default_role', 'subscriber' ) );
+		// Set default clone permissions in General Settings or with 'div_default_role' filter
+		$default_role = apply_filters( 'div_default_role', get_option( 'default_role', 'subscriber' ) );
 
 		// If array, look for inherited roles, and setup any custom capabilities
         if (  is_array($c) ) {
@@ -163,5 +163,7 @@ class DS_Role {
 			remove_role( $role );
 		}
 	}
+
+	//TODO: clean_roles() to remove all custom capabilities added to a WP standard role
 
 }

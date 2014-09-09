@@ -3,17 +3,17 @@
  * Div Starter Taxonomy Class
  * Creates custom taxonomies
  *
- * @class       DS_Taxonomy
+ * @class       DIV_Taxonomy
  * @author      Gijs Jorissen
  * @category    Core
  * @package     DivStarter/Classes
- * @uses        DS_Helper
+ * @uses        DIV_Helper
  * @version     1.0
  */
 
 if( ! defined( 'ABSPATH' ) ) exit;
 
-class DS_Taxonomy{
+class DIV_Taxonomy{
     var $taxonomy_name;
     var $taxonomy_labels;
     var $taxonomy_args;
@@ -38,7 +38,7 @@ class DS_Taxonomy{
             $this->post_type_name = $post_type_name;
 
             // Taxonomy properties
-            $this->taxonomy_name        = DS_Helper::uglify( $name );
+            $this->taxonomy_name        = DIV_Helper::uglify( $name );
             $this->taxonomy_labels      = $labels;
             $this->taxonomy_args        = $args;
 
@@ -62,8 +62,8 @@ class DS_Taxonomy{
      *
      */
     function register_taxonomy() {
-        $name       = DS_Helper::beautify( $this->taxonomy_name );
-        $plural     = DS_Helper::pluralize( $name );
+        $name       = DIV_Helper::beautify( $this->taxonomy_name );
+        $plural     = DIV_Helper::pluralize( $name );
 
         // Default labels, overwrite them with the given labels.
         $labels = array_merge(
