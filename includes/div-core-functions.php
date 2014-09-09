@@ -28,17 +28,17 @@ if ( ! function_exists( 'div_get_template_part' ) ) {
 		# First Look: yourtheme/slug-name.php
 		# Second Look: yourtheme/starter/slug-name.php
 		if ( $name ) {
-			$template = locate_template( array( "{$slug}-{$name}.php", DIV()->template_path() . "{$slug}-{$name}.php" ) );
+			$template = locate_template( array( "{$slug}-{$name}.php", $library->template_path() . "{$slug}-{$name}.php" ) );
 		}
 
 		# Get default slug-name.php
-		if ( ! $template && $name && file_exists( DIV()->plugin_path() . "/templates/{$slug}-{$name}.php" ) ) {
-			$template = DIV()->plugin_path() . "/templates/{$slug}-{$name}.php";
+		if ( ! $template && $name && file_exists( $library->plugin_path() . "/templates/{$slug}-{$name}.php" ) ) {
+			$template = $library->plugin_path() . "/templates/{$slug}-{$name}.php";
 		}
 
-		# If template file doesn't exist, look in yourtheme/slug.php and yourtheme/divstarter/slug.php
+		# If template file doesn't exist, look in yourtheme/slug.php and yourtheme/divlibrary/slug.php
 		if ( ! $template ) {
-			$template = locate_template( array( "{$slug}.php", DIV()->template_path() . "{$slug}.php" ) );
+			$template = locate_template( array( "{$slug}.php", $library->template_path() . "{$slug}.php" ) );
 		}
 
 		# Allow 3rd party plugin filter template file from their plugin
@@ -52,7 +52,7 @@ if ( ! function_exists( 'div_get_template_part' ) ) {
 
 if ( ! function_exists( 'div_get_template' ) ) {
 	/**
-	 * Get other templates (e.g. product attributes) passing attributes and including the file.
+	 * Get other templates passing attributes and including the file.
 	 *
 	 * @access public
 	 * @param string $template_name
@@ -73,11 +73,11 @@ if ( ! function_exists( 'div_get_template' ) ) {
 			return;
 		}
 
-		do_action( 'divstarter_before_template_part', $template_name, $template_path, $located, $args );
+		do_action( 'divlibrary_before_template_part', $template_name, $template_path, $located, $args );
 
 		include( $located );
 
-		do_action( 'divstarter_after_template_part', $template_name, $template_path, $located, $args );
+		do_action( 'divlibrary_after_template_part', $template_name, $template_path, $located, $args );
 	}
 }
 
@@ -98,29 +98,25 @@ if ( ! function_exists( 'div_locate_template' ) ) {
 	 * @return string
 	 */
 	function div_locate_template( $template_name, $template_path = '', $default_path = '' ) {
-		if ( ! $template_path ) {
-			$template_path = DIV()->template_path();
-		}
-
 		if ( ! $default_path ) {
-			$default_path = DIV()->plugin_path() . '/templates/';
+			$default_path = '/templates/';
 		}
 
 		# Look within passed path within the theme - this is priority
 		$template = locate_template(
 			array(
-				trailingslashit( $template_path ) . $template_name,
-				$template_name
+				trailingslashit( $template_path ) . $template_name, # Checks theme/template-path/file-name.php
+				$template_name										# Checks theme/file-name.php
 			)
 		);
 
-		# Get default template
+		# If no template in theme structure, then fetch from source (application/plugin)
 		if ( ! $template ) {
 			$template = $default_path . $template_name;
 		}
 
 		# Return what we found
-		return apply_filters('divstarter_locate_template', $template, $template_name, $template_path);
+		return apply_filters('divlibrary_locate_template', $template, $template_name, $template_path);
 	}
 }
 
@@ -338,5 +334,47 @@ if ( ! function_exists( 'div_get_image_sizes' ) ) {
 		$additional_sizes = div_get_additional_image_sizes();
 
 		return array_merge( $builtin_sizes, $additional_sizes );
+	}
+}
+
+if ( ! function_exists( 'div_is_child' ) ) {
+	/**
+	 * GET ALL IMAGE SIZES
+	 *
+	 * Returns a two-dimensional array of ALL registered image
+	 * sizes, with width, height and crop sub-keys.
+	 *
+	 * @author Nick Worth
+	 * @global array $_wp_additional_image_sizes
+	 * @return array
+	 */
+	function div_is_child($page) { 
+		global $post;
+		$page_ID = ( is_string($page) ) ? div_get_ID_by_slug($page) : $page;
+		if( is_page() && ($post->post_parent==$page_ID) ) {
+	        return true;
+		} else { 
+	        return false; 
+		}
+	}
+}
+
+if ( ! function_exists( 'div_get_ID_by_slug' ) ) {
+	/**
+	 * GET PAGE ID BY SLUG
+	 *
+	 * Returns the ID of the page by passing the slug
+	 *
+	 * @author Nick Worth
+	 * @param string $page_slug
+	 * @return number
+	 */
+	function div_get_ID_by_slug($page_slug) { 
+		$page = get_page_by_path($page_slug);
+	    if ($page) {
+	        return $page->ID;
+	    } else {
+	        return null;
+	    }
 	}
 }
