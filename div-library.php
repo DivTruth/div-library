@@ -215,13 +215,16 @@ final class div_library {
 	 */
 	private function includes() {
 		include_once( 'includes/div-core-functions.php' );		# Core div functions
-		include_once( 'includes/class-div-prints.php' );		# Printout settings class
-		include_once( 'includes/class-div-detection.php' );		# Browser/Device Detection class
-		include_once( 'includes/class-div-shortcodes.php' );	# Shortcodes class
+		foreach( glob($this->path['includes_dir'] . 'class-*.php') as $class_path ) {
+			require_once( $class_path );
+		}
+		// include_once( 'includes/class-div-prints.php' );		# Printout settings class
+		// include_once( 'includes/class-div-detection.php' );		# Browser/Device Detection class
+		// include_once( 'includes/class-div-shortcodes.php' );	# Shortcodes class
+		// include_once( 'includes/class-div-widgets.php' );		# For creating custom widgets
 
 		// PCO Image Widget Field - by: PeytzCo, Compute, jamesbonham
 		include_once( 'includes/fields/image-widget-field/pco-image-widget-field.php' );
-		include_once( 'includes/class-div-widgets.php' );		# For creating custom widgets
 
 		if ( is_admin() ) {
 			#TODO: include_once( 'includes/admin/class-wc-admin.php' );

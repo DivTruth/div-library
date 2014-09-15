@@ -6,7 +6,7 @@
  * @class       DIV_Taxonomy
  * @author      Gijs Jorissen
  * @category    Core
- * @package     DivStarter/Classes
+ * @package     div_library/Classes
  * @uses        DIV_Helper
  * @version     1.0
  */

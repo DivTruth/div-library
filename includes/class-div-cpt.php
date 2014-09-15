@@ -6,7 +6,7 @@
  * @class       DIV_CPT
  * @author      Gijs Jorissen (Modified by: Div Blend Team)
  * @category    Core
- * @package     Div_Library/Classes
+ * @package     div_library/Classes
  * @uses        DIV_Helper
  * @version     1.0
  * @link        http://wp.tutsplus.com/tutorials/creative-coding/custom-post-type-helper-class/

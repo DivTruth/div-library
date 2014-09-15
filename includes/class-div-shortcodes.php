@@ -5,7 +5,7 @@
  *
  * @class 		DIV_Shortcodes
  * @version		1.0
- * @package		Div_Library/Classes
+ * @package		div_library/Classes
  * @category	Class
  * @author 		Div Blend Team
  */

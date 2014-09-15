@@ -5,7 +5,7 @@
  *
  * @class       DIV_Helper
  * @version     1.0
- * @package     DivStarter/Classes
+ * @package     div_library/Classes
  * @category    Class
  * @author      Div Blend Team
  */

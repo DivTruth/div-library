@@ -4,7 +4,7 @@
  * General core functions available on both the front-end and admin.
  *
  * @version     1.0
- * @package 	Div_Library/Functions
+ * @package 	div_library/Functions
  * @category 	Core
  * @author 		Div Blend Team
  */
