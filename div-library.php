@@ -29,7 +29,7 @@ final class div_library {
 	 * @var 	string
 	 * @since   1.0
 	 */
-	public $version = '0.1';
+	public $version = '0.2.1';
 
 	/**
 	 * @var 	array

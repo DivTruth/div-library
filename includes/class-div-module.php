@@ -7,7 +7,7 @@
  * @version		1.0
  * @package		div_library/Classes
  * @category	Class
- * @uses        DIV_CPT, DIV_Template
+ * @uses        DIV_CPT, DIV_Template, DIV_Helper
  */
 
 if( ! defined( 'ABSPATH' ) ) exit;
@@ -36,9 +36,12 @@ abstract class DIV_Module {
         # if ACF fields are used include them
         if ( class_exists( 'Acf' ) ) $this->register_acf_fields();
 
+        # Default: single-{cpt}.php
         $this->single_template = $this->dir.'/single-'.$this->cpt.'.php';
+
+        # Default: array( page-{plural-cpt}.php => Plural CPT )
         $this->page_templates = array(
-          'page-'.$this->cpt.'.php' => DIV_Helper::beautify(DIV_Helper::pluralize($this->cpt)), # page-testomies.php
+            'page-'.DIV_Helper::pluralize($this->cpt).'.php' => DIV_Helper::beautify(DIV_Helper::pluralize($this->cpt)),
         );
     }
 
@@ -123,7 +126,6 @@ abstract class DIV_Module {
      */
     public function page_template($templates) {
         $page_templates = new DIV_Template($this->page_templates, $this->dir);
-        // DIV_Print::obj($page_templates);
     }
 
 }
