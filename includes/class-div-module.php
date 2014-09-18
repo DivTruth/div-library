@@ -17,6 +17,7 @@ abstract class DIV_Module {
     public $lables = array();
     public $args = array();
     public $column_filters = array();
+    public $column_styles = array();
     public $page_templates = array();
     public $single_template;
     public $module;
@@ -62,6 +63,7 @@ abstract class DIV_Module {
         
         add_filter( "manage_".$this->cpt."_posts_columns", array( $this, 'columns') );
         add_action( "manage_".$this->cpt."_posts_custom_column", array( $this, 'column_filters'), 10, 2 );
+        add_action( 'admin_head-edit.php', array( $this, 'column_styles' ) );
     }
 
     /**
@@ -102,11 +104,36 @@ abstract class DIV_Module {
      * @example $this->add_column_filter('featured_image', function($post_id){} );
      * 
      * @param string $column
-     * @param string $value
+     * @param string $function
      * @return void
      */
     function add_column_filter($column, $function){
         $this->column_filters[$column] = $function;        
+    }
+
+    /**
+     * ADD COLUMN STYLES
+     * @example $this->add_column_styles('featured_image', 'width: 120px; text-align: center' );
+     * 
+     * @param string $column
+     * @param string $styles
+     * @return void
+     */
+    function add_column_styles($column, $styles){
+        $this->column_styles[$column] = $styles;
+    }
+
+    /**
+     * ACTION: COLUMN STYLES
+     * Adds styles to admin head for post panel columns
+     * 
+     */
+    function column_styles(){
+        _e('<style type="text/css">');
+            foreach ($this->column_styles as $column => $styles) {
+                _e('.widefat .column-'.$column.' { '.$styles.' }');
+            }
+        _e('</style>');
     }
 
     /**
