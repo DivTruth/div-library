@@ -3,10 +3,10 @@
  * DIV_Module class
  * Abstract class used for creating CPT modules at the site application or plugin level
  *
- * @class 		DIV_Module
- * @version		1.0
- * @package		div_library/Classes
- * @category	Class
+ * @class       DIV_Module
+ * @version     1.0
+ * @package     div_library/Classes
+ * @category    Class
  * @uses        DIV_CPT, DIV_Template, DIV_Helper
  */
 
@@ -16,19 +16,20 @@ abstract class DIV_Module {
 
     public $lables = array();
     public $args = array();
+    public $column_filters = array();
     public $page_templates = array();
     public $single_template;
     public $module;
     public $cpt;
     public $dir;
 
-	/**
-	 * CONSTRUCTOR
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function __construct() {
+    /**
+     * CONSTRUCTOR
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct() {
         $this->cpt = get_class($this);;
         $this->dir = $this->get_directory();
         $this->module = $this->register_cpt();
@@ -58,6 +59,9 @@ abstract class DIV_Module {
         add_filter( 'single_template', array( $this, 'single_template'), 20 );
         add_filter( 'init', array( $this, 'page_template' ) );
         add_action( 'widgets_init', array( $this, 'include_widgets' ), 20 ); # After Div Library (10)
+        
+        add_filter( "manage_".$this->cpt."_posts_columns", array( $this, 'columns') );
+        add_action( "manage_".$this->cpt."_posts_custom_column", array( $this, 'column_filters'), 10, 2 );
     }
 
     /**
@@ -77,10 +81,49 @@ abstract class DIV_Module {
      * REGISTER CPT
      *
      * @uses DIV_CPT
-     * @link http://codex.wordpress.org/Function_Reference/register_post_type 
+     * @link http://divblend.com/div-library/class-div_cpt/
      */
     public function register_cpt(){
         return new DIV_CPT($this->cpt, $this->args, $this->labels);
+    }
+
+    /**
+     * FILTER: COLUMNS
+     * 
+     * @param array $cols
+     * @return array $cols
+     */
+    function columns($cols){
+        return $cols = ($this->columns) ? $this->columns : $cols;
+    }
+
+    /**
+     * ADD COLUMN FILTER
+     * @example $this->add_column_filter('featured_image', function($post_id){} );
+     * 
+     * @param string $column
+     * @param string $value
+     * @return void
+     */
+    function add_column_filter($column, $function){
+        $this->column_filters[$column] = $function;        
+    }
+
+    /**
+     * ACTION: CUSTOM COLUMN FILTERS
+     * 
+     * @param array $cols
+     * @param array $post_id
+     * @return array $cols
+     */
+    public function column_filters( $columns, $post_id ) {
+        foreach ($this->column_filters as $column => $function) {
+            switch ( $columns ) {
+                case $column:
+                    $function($post_id);
+                    break;
+            }
+        }
     }
 
     /**
@@ -106,7 +149,7 @@ abstract class DIV_Module {
     }
 
     /**
-     * SINGLE TEMPLATE FOR CPT
+     * FILTER: SINGLE TEMPLATE FOR CPT
      * Setup single template for this cpt module
      * @example /modules/module/single-custom.php
      *
@@ -119,7 +162,7 @@ abstract class DIV_Module {
     }
 
     /**
-     * PAGE TEMPLATE FOR CPT
+     * FILTER: PAGE TEMPLATE FOR CPT
      * Setup the page template for this cpt module
      * @example /modules/module/page-custom.php
      *
