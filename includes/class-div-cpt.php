@@ -8,7 +8,7 @@
  * @category    Core
  * @package     div_library/Classes
  * @uses        DIV_Helper
- * @version     1.0
+ * @version     1.1
  * @link        http://wp.tutsplus.com/tutorials/creative-coding/custom-post-type-helper-class/
  */
 
@@ -53,8 +53,11 @@ class DIV_CPT{
 
             // Add action to register the post type, if the post type doesnt exist
             if( ! post_type_exists( $this->name ) ) {
-                add_action( 'init', array( &$this, 'register_post_type' ) );
+                add_action( 'init', array( $this, 'register_post_type' ) );
             }
+
+            add_action( 'admin_menu', array( $this, 'set_menu_position' ) );
+
         }
     }
     
@@ -86,6 +89,7 @@ class DIV_CPT{
             ),
             $this->labels
         );
+        $this->labels = $labels;
 
         // Post type arguments
         $args = array_merge( 
@@ -98,6 +102,7 @@ class DIV_CPT{
             ),
             $this->args
         );
+        $this->args = $args;
 
         // Register the post type
         register_post_type( $this->name, $args );
@@ -143,6 +148,28 @@ class DIV_CPT{
         
         // For method chaining
         return $this;
+    }
+
+    /**
+     * Set menu position by decimal
+     *
+     * @return  void
+     *
+     * @author  Nick Worth
+     * @since   1.1
+     * 
+     */
+    function set_menu_position() {
+        remove_menu_page( 'edit.php?post_type='.$this->name );
+        add_menu_page( 
+            $this->args['labels']['name'],          # Menu Title
+            $this->args['labels']['name'],          # Menu
+            'manage_options',                       # Capabilities
+            'edit.php?post_type='.$this->name,      # Menu Slug
+            '',                                     # Function (void)
+            $this->args['menu_icon'],               # Menu Icon
+            $this->args['menu_position']            # Menu Position
+        );
     }
 
     /**
