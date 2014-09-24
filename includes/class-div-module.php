@@ -198,4 +198,16 @@ abstract class DIV_Module {
         $page_templates = new DIV_Template($this->page_templates, $this->dir);
     }
 
+    /**
+     * FILTER: PAGE TEMPLATE FOR CPT
+     * Setup the page template for this cpt module
+     * @example /modules/module/page-custom.php
+     *
+     */
+    public function remove_yoast_seo() {
+        add_action( 'admin_head', function(){
+            remove_meta_box('wpseo_meta', $this->cpt, 'normal');
+        }, 11 );
+    }
+
 }
