@@ -122,6 +122,51 @@ if ( ! function_exists( 'div_locate_template' ) ) {
 
 /** Scripts/Styles ******************************************************************/
 
+if ( ! function_exists( 'div_enqueue_css' ) ) {
+	/**
+	 * Queue some JavaScript code to be output in the footer.
+	 *
+	 * @param string $code
+	 */
+	function div_enqueue_css( $code ) {
+		global $div_queued_css;
+
+		if ( empty( $div_queued_css ) ) {
+			$div_queued_css = '';
+		}
+
+		$div_queued_css .= "\n" . $code . "\n";
+	}
+}
+
+if ( ! function_exists( 'div_print_css' ) ) {
+	/**
+	 * Output any queued javascript code in the footer.
+	 *
+	 * @since   1.0
+	 * @global 	$div_queued_css
+	 * @usedby 	wp_footer
+	 */
+	function div_print_css() {
+		global $div_queued_css;
+
+		if ( ! empty( $div_queued_css ) ) {
+
+			echo "<!-- Div Library Styles -->\n<style>";
+
+			// Sanitize
+			$div_queued_css = wp_check_invalid_utf8( $div_queued_css );
+			$div_queued_css = preg_replace( '/&#(x)?0*(?(1)27|39);?/i', "'", $div_queued_css );
+			$div_queued_css = str_replace( "\r", '', $div_queued_css );
+
+			echo $div_queued_css . "\n</style>\n";
+
+			unset( $div_queued_css );
+		}
+	}
+}
+add_action( 'wp_footer', 'div_print_css', 99 );
+
 if ( ! function_exists( 'div_enqueue_js' ) ) {
 	/**
 	 * Queue some JavaScript code to be output in the footer.
