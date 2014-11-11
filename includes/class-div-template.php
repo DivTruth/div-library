@@ -2,6 +2,7 @@
 /**
  * DIV_Template class
  * Used to add pages templates to WordPress
+ * @example new DIV_Template( array( page-template.php => Page Template ), $directory_path );
  *
  * @class 		DIV_Template
  * @version		1.0
