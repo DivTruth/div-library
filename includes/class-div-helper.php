@@ -91,6 +91,28 @@ class DIV_Helper{
       return apply_filters( 'div_sluglify', $text );
     }
 
+    /**
+     * Removes slug format from a string. Capitalize words and remove underscores and/or hyphens
+     *
+     * @param string $string
+     * @return string
+     *
+     * @author Nick Worth
+     * @since 1.0
+     *
+     */
+    static function unslugify( $string ) {
+      // remove hyphens
+      $text = str_replace( '-', ' ', $string);
+
+      // remove underscores
+      $text = str_replace( '_', ' ', $text);
+      
+      // remove underscores
+      $text = ucwords($text);
+      
+      return apply_filters( 'unslugify', $text );
+    }
 
     /**
      * Makes a word plural
