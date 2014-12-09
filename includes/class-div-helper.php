@@ -286,6 +286,31 @@ class DIV_Helper{
       $func = create_function('$c', 'return "_" . strtolower($c[1]);');
       return apply_filters( 'div_camel_case', preg_replace_callback('/([A-Z])/', $func, $str) );
     }
+    
+    /**
+    * Truncate String
+    *
+    * @access public
+    * @param <STRING> $string
+    * @param <NUMBER> $truncated
+    * @return <STRING> $truncated_text.
+    *
+    * @author Nick Worth
+    * @since 1.0
+    */
+    static function truncate($string, $truncated=100) {
+      $parts = preg_split('/([\s\n\r]+)/', $string, null, PREG_SPLIT_DELIM_CAPTURE);
+      $parts_count = count($parts);
+
+      $length = 0;
+      $last_part = 0;
+      for (; $last_part < $parts_count; ++$last_part) {
+        $length += strlen($parts[$last_part]);
+        if ($length > $truncated) { break; }
+      }
+
+      return apply_filters( 'div_truncate', implode(array_slice($parts, 0, $last_part)) );
+    }
 
     /**
      * Checks if the callback is a Wordpress callback
