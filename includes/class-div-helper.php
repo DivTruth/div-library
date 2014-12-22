@@ -4,7 +4,7 @@
  * General class with main methods and helper methods
  *
  * @class       DIV_Helper
- * @version     1.0
+ * @version     1.1.0
  * @package     div_library/Classes
  * @category    Class
  * @author      Div Blend Team
