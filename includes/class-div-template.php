@@ -107,22 +107,23 @@ class DIV_Template {
 	 */
     public function view_project_template( $template ) {
         global $post;
-
-        if (!isset($this->templates[get_post_meta( 
-			$post->ID, '_wp_page_template', true 
+        $id = ( isset( $post->ID ) ? get_the_ID() : NULL );
+        
+        if (!isset($this->templates[get_post_meta(
+			$id, '_wp_page_template', true 
 		)] ) ) {
             return $template;
         } 
 
         $file = $this->dir. get_post_meta( 
-			$post->ID, '_wp_page_template', true 
-		);
+		$id, '_wp_page_template', true 
+	);
 		
         # Just to be safe, we check if the file exist first
         if( file_exists( $file ) ) { return $file;
         } else { echo '<strong>Template not found</strong>: '.$file; }
 
         return $template;
-    } 
+    }
 
 }
