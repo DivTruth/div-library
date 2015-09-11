@@ -29,7 +29,7 @@ final class div_library {
 	 * @var 	string
 	 * @since   1.0
 	 */
-	public $version = '0.2.1';
+	public $version = '0.2.2';
 
 	/**
 	 * @var 	array
@@ -233,6 +233,7 @@ final class div_library {
 		#TODO: Consider/Setup autoloading options
 		// Classes (used on all pages)
 		include_once( 'includes/class-div-helper.php' );		# Power tools for data manipluation
+		include_once( 'includes/class-div-admin.php' );			# WP Admin helper methods
 		include_once( 'includes/class-div-taxonomy.php' );		# For creating Custom taxonomies
 		include_once( 'includes/class-div-cpt.php' );			# For creating Custom Post Types
 		include_once( 'includes/class-div-roles.php' );			# For creating Custom User Types
