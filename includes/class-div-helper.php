@@ -452,11 +452,10 @@ class DIV_Helper{
      * @return  string
      *
      * @author  Gijs Jorissen
-     * @since   0.4.1
+     * @since   1.0
      *
      */
-    function _determine_custom_dir( $path = __FILE__ )
-    {
+    static function _determine_custom_dir( $path = __FILE__ ) {
         $path = dirname( $path );
         $path = str_replace( '\\', '/', $path );
         $explode_path = explode( '/', $path );
@@ -480,7 +479,24 @@ class DIV_Helper{
         else {
             return $this->_determine_custom_dir( $path );
         }
-    }       
+    } 
+
+    /**
+     * Return the output of an include file to a string variable
+     * @link    http://stackoverflow.com/a/2150215/1058371
+     * @param   string $file path to the file you want to encapsulate
+     * @return  string
+     *
+     * @author  Jeremy Kauffman
+     * @since   1.0
+     *
+     */
+    static function return_output($file){
+        ob_start();
+        include $file;
+        return ob_get_clean();
+    }
+
 }
 
 ?>
