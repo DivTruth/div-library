@@ -67,6 +67,56 @@ abstract class DIV_Module {
     }
 
     /**
+     * CUSTOM CPT LOOP
+     * Get all published entries
+     *
+     * @access public
+     * @return string
+     */
+    public function loop($args=NULL, $output=true){
+        $post_count = (is_string($args) || is_integer($args)) ? $args : 10;
+        
+        $defaults = array(
+            'post_type'         => $this->cpt,
+            'post_status'       => 'publish',
+            'posts_per_page'    => $post_count
+        );
+
+        /* If an array of options is passed then override the defaults */
+        if(is_array($args)) {
+            $options = array_merge($args,$defaults);
+        } else {
+            $options = $defaults;
+        }
+
+        $query = new WP_Query( $defaults );
+
+        /* If output false, just return the query results */
+        if(!$output){
+            return $query;
+        }
+
+        if ($query->have_posts()) : while ($query->have_posts()) : $query->the_post();
+
+            if(file_exists($this->dir . '/loop-'.$this->cpt.'.php')){
+                echo apply_filters( 'loop_content_'.$this->cpt, DIV_Helper::return_output($this->dir . '/loop-'.$this->cpt.'.php') );
+            }
+
+        endwhile;
+
+            #TODO: Pagination functionality
+    
+        else :
+
+            _e('<article id="post-not-found" class="hentry clearfix">');
+                echo apply_filters( $this->cpt.'_not_found', 'No '.DIV_Helper::pluralize($this->cpt).' were found.' );
+            _e('</article>');
+    
+        endif;
+        wp_reset_postdata();         
+    }
+
+    /**
      * GET CLASS DIRECTORY
      * Get the child class directory
      *
