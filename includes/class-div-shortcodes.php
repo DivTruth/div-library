@@ -15,25 +15,6 @@ if( ! defined( 'ABSPATH' ) ) exit;
 class DIV_Shortcodes {
 
 	/**
-	 * Init shortcodes
-	 */
-	public static function init() {
-		global $shortcode_tags;
-
-		// Define shortcodes
-		$shortcodes = array(
-			'chart'		=> __CLASS__ . '::chart',
-			'download'	=> __CLASS__ . '::download',
-			'pdf'		=> __CLASS__ . '::pdf',
-		);
-
-		foreach ( $shortcodes as $shortcode => $function ) {
-			if ( !array_key_exists( $shortcode, $shortcode_tags ) )
-			add_shortcode( apply_filters( "{$shortcode}_shortcode_tag", $shortcode ), $function );
-		}
-	}
-
-	/**
 	 * Shortcode Wrapper
 	 *
 	 * @param mixed $function
