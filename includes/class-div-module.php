@@ -31,7 +31,7 @@ abstract class DIV_Module {
      * @return void
      */
     public function __construct() {
-        $this->cpt = get_class($this);;
+        $this->cpt = ($this->cpt) ? $this->cpt : get_class($this);
         $this->dir = $this->get_directory();
         $this->module = $this->register_cpt();
 
@@ -124,7 +124,7 @@ abstract class DIV_Module {
      * @return string
      */
     public function get_directory(){
-        $reflector = new ReflectionClass($this->cpt);
+        $reflector = new ReflectionClass(get_class($this));
         $fn = $reflector->getFileName();
         return dirname($fn).'/';
     }
