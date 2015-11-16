@@ -146,7 +146,7 @@ abstract class DIV_Module {
      * @return array $cols
      */
     function columns($cols){
-        return $cols = ($this->columns) ? $this->columns : $cols;
+        return $cols = (property_exists($this, 'columns')) ? $this->columns : $cols;
     }
 
     /**
