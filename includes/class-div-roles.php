@@ -19,6 +19,12 @@ class DIV_Role {
 	public $roles;
 
 	/**
+	 * Store all non-standard capabilities
+	 * @var array
+	 */
+	public $capabilities;
+
+	/**
 	 * Constructor
 	 * @access public
 	 * @param string|array $name
@@ -28,6 +34,7 @@ class DIV_Role {
 	 */
 	public function __construct($name, $display_name = "", $capabilities = "") {
 		$roles = $this->get_roles();
+		$this->capabilities = array();
 
 		if( ! empty( $name ) ) {
 			if( is_array( $name ) ) {
