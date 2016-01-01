@@ -15,7 +15,10 @@ if( ! defined( 'ABSPATH' ) ) exit;
 
 class DIV_Role {
 
-	#store all non-standard roles
+	/**
+	 * Store all non-standard roles
+	 * @var array
+	 */
 	public $roles;
 
 	/**
@@ -33,7 +36,7 @@ class DIV_Role {
 	 * @return array $roles
 	 */
 	public function __construct($name, $display_name = "", $capabilities = "") {
-		$roles = $this->get_roles();
+		$this->roles = self::get_roles();
 		$this->capabilities = array();
 
 		if( ! empty( $name ) ) {
@@ -73,7 +76,9 @@ class DIV_Role {
 	}
 
 	/**
-	 * Setup the capabilities array
+	 * Setup the capabilities array (includes role inheritance)
+	 * NOTE: If no capability array is passed then subscriber or 
+	 * default role capabilities will be applied
 	 * @access public
 	 * @param string/array
 	 * @return array
