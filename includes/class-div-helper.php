@@ -497,6 +497,19 @@ class DIV_Helper{
         return ob_get_clean();
     }
 
+    /**
+     * Is Email
+     * Returns whether a submitted string is a valid email address
+     *
+     * @param   string   $email
+     *
+     * @author  Michael Rushton
+     * @since   0.2.1
+     */
+    static function IsEmail($email) {
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
 }
 
 ?>
