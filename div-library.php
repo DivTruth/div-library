@@ -30,7 +30,7 @@ final class div_library {
 	 * 
 	 * @var 	string
 	 */
-	public $version = '0.2.2';
+	public $version = '0.3.0';
 
 	/**
 	 * Path array for all known directories
