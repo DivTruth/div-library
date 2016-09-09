@@ -113,10 +113,18 @@ final class div_library {
 	 * @param      string  $class
 	 */
 	private function includes( $class ) {
+		# Check for div include class type
+		if (stripos($class, 'DIV_') === false) return;
+
+		# Convert to proper class file structure
+		$class = str_replace('_', '-', strtolower($class));
+		
+		# Check for div include class structure
 		if( is_file($this->path['includes_dir'].'class-'.$class.'.php') )
 			require $this->path['includes_dir'].'class-'.$class.'.php';
 		else if( is_file($this->path['includes_dir'].'fields/'.$class.'.php') )
 			require $this->path['includes_dir'].'fields/'.$class.'.php';
+			
 	}
 
 	/**
@@ -125,9 +133,16 @@ final class div_library {
 	 * @param      string  $class
 	 */
 	private function services( $class ) {
+		# Check for div service class type
+		if (strpos($class, 'DIV\\services') === false) return;
+
+		# Convert to proper service class file structure
 		$class = str_replace('\\', '-', strtolower($class));
+		
+		# Include service class
 		if( is_file($this->path['services_dir'].$class.'.php') )
 			require $this->path['services_dir'].$class.'.php';
+
 	}
 
 	/**
