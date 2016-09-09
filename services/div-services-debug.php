@@ -3,8 +3,6 @@
  * DIV debug class
  * Used to print out settings, shortcodes, enqued scripts & styles, etc.
  *
- * @class       debug
- * @version     1.0
  * @package     div-library/services
  * @author      Div Blend Team
  */
