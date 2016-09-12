@@ -1,7 +1,7 @@
 <?php
 /**
- * DIV helper class
- * General class with main methods and helper methods
+ * DIV Service: Helper Class
+ * A service class with utility and helper methods
  *
  * @package     div-library/services
  * @author      Div Blend Team
@@ -12,31 +12,101 @@ namespace DIV\services{
     
     if ( ! class_exists( 'helper' ) ) :
 
+        /**
+         * helper service class
+         * @example    DIV\Services\helper::method()
+         */
         class helper{
             var $dir = array();
 
-            static $_reserved = array( 'attachment', 'attachment_id', 'author', 'author_name', 'calendar', 'cat', 'category','category__and', 'category__in', 'category__not_in', 
-            'category_name', 'comments_per_page', 'comments_popup', 'cpage', 'day', 'debug', 'error', 'exact', 'feed', 'hour', 'link_category', 
-            'm', 'minute', 'monthnum', 'more', 'name', 'nav_menu', 'nopaging', 'offset', 'order', 'orderby', 'p', 'page', 'page_id', 'paged', 'pagename', 'pb', 
-            'perm', 'post', 'post__in', 'post__not_in', 'post_format', 'post_mime_type', 'post_status', 'post_tag', 'post_type', 
-            'posts', 'posts_per_archive_page', 'posts_per_page', 'preview', 'robots', 's', 'search', 'second', 'sentence', 'showposts', 
-            'static', 'subpost', 'subpost_id', 'tag', 'tag__and', 'tag__in','tag__not_in', 'tag_id', 'tag_slug__and', 'tag_slug__in', 'taxonomy', 
-            'tb', 'term', 'type', 'w', 'withcomments', 'withoutcomments', 'year' );
+            static $_reserved = array( 
+                'attachment',
+                'attachment_id',
+                'author',
+                'author_name',
+                'calendar',
+                'cat',
+                'category',
+                'category__and',
+                'category__in',
+                'category__not_in',
+                'category_name',
+                'comments_per_page',
+                'comments_popup',
+                'cpage',
+                'day',
+                'debug',
+                'error',
+                'exact',
+                'feed',
+                'hour',
+                'link_category',
+                'm',
+                'minute',
+                'monthnum',
+                'more',
+                'name',
+                'nav_menu',
+                'nopaging',
+                'offset',
+                'order',
+                'orderby',
+                'p',
+                'page',
+                'page_id',
+                'paged',
+                'pagename',
+                'pb',
+                'perm',
+                'post',
+                'post__in',
+                'post__not_in',
+                'post_format',
+                'post_mime_type',
+                'post_status',
+                'post_tag',
+                'post_type',
+                'posts',
+                'posts_per_archive_page',
+                'posts_per_page',
+                'preview',
+                'robots',
+                's',
+                'search',
+                'second',
+                'sentence',
+                'showposts',
+                'static',
+                'subpost',
+                'subpost_id',
+                'tag',
+                'tag__and',
+                'tag__in',
+                'tag__not_in',
+                'tag_id',
+                'tag_slug__and',
+                'tag_slug__in',
+                'taxonomy',
+                'tb',
+                'term',
+                'type',
+                'w',
+                'withcomments',
+                'withoutcomments',
+                'year'
+            );
 
             function __construct() {
-                // Determine the full path to the this folder
+                # Determine the full path to the this folder
                 $this->_determine_custom_dir( dirname( __FILE__ ) );
             }
 
             /**
              * Beautifies a string. Capitalize words and remove underscores
+             * @author     Gijs Jorissen
              *
-             * @param string $string
-             * @return string
-             *
-             * @author Gijs Jorissen
-             * @since 1.0
-             *
+             * @param      string $string
+             * @return     string
              */
             static function beautify( $string ) {
               return apply_filters( 'div_beautify', ucwords( str_replace( '_', ' ', $string ) ) );
@@ -45,13 +115,10 @@ namespace DIV\services{
 
             /**
              * Uglifies a string. Remove underscores and lower strings
+             * @author     Gijs Jorissen
              *
-             * @param string $string
-             * @return string
-             *
-             * @author Gijs Jorissen
-             * @since 1.0
-             *
+             * @param      string $string
+             * @return     string
              */
             static function uglify( $string ) {
               return apply_filters( 'div_uglify', str_replace( '-', '_', sanitize_title( $string ) ) );
@@ -59,56 +126,48 @@ namespace DIV\services{
 
             /**
              * Slugifies a string. Adding underscores and lower strings
+             * @author     Nick Worth
              *
-             * @param string $string
-             * @return string
-             *
-             * @author Nick Worth
-             * @since 1.0
-             *
+             * @param      string  $string
+             * @return     string
              */
             static public function slugify($text) { 
-              // replace non letter or digits by -
+              # Replace non letter or digits by -
               $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
 
-              // trim
+              # Trim
               $text = trim($text, '-');
 
-              // transliterate
+              # Transliterate
               $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
 
-              // lowercase
+              # Lowercase
               $text = strtolower($text);
 
-              // remove unwanted characters
+              # Remove unwanted characters
               $text = preg_replace('~[^-\w]+~', '', $text);
 
-              if (empty($text))
-              {
-                return 'n-a';
-              }
+              if (empty($text)) return 'n-a';
 
               return apply_filters( 'div_sluglify', $text );
             }
 
             /**
-             * Removes slug format from a string. Capitalize words and remove underscores and/or hyphens
+             * Removes slug format from a string. Capitalize words and remove
+             * underscores and/or hyphens
+             * @author     Nick Worth
              *
-             * @param string $string
-             * @return string
-             *
-             * @author Nick Worth
-             * @since 1.0
-             *
+             * @param      string  $string
+             * @return     string
              */
             static function unslugify( $string ) {
-              // remove hyphens
+              # Remove hyphens
               $text = str_replace( '-', ' ', $string);
 
-              // remove underscores
+              # Remove underscores
               $text = str_replace( '_', ' ', $text);
               
-              // remove underscores
+              # Remove underscores
               $text = ucwords($text);
               
               return apply_filters( 'unslugify', $text );
@@ -116,13 +175,10 @@ namespace DIV\services{
 
             /**
              * Makes a word plural
+             * @author     Gijs Jorissen
              *
-             * @param string $string
-             * @return string
-             *
-             * @author Gijs Jorissen
-             * @since 1.0
-             *
+             * @param      string  $string
+             * @return     string
              */
             static function pluralize( $string ) {
               $plural = array(
@@ -165,37 +221,33 @@ namespace DIV\services{
                 'equipment'
               );
 
-              // Save time if string in uncountable
+              # Save time if string in uncountable
               if ( in_array( strtolower( $string ), $uncountable ) )
                 return apply_filters( 'div_pluralize', $string );
 
-              // Check for irregular words
+              # Check for irregular words
               foreach ( $irregular as $noun ) {
                 if ( strtolower( $string ) == $noun[0] )
                   return apply_filters( 'div_pluralize', $noun[1] );
               }
 
-              // Check for plural forms
+              # Check for plural forms
               foreach ( $plural as $pattern ) {
                 if ( preg_match( $pattern[0], $string ) )
                   return apply_filters( 'div_pluralize', preg_replace( $pattern[0], $pattern[1], $string ) );
               }
 
-              // Return if noting found
+              # Return if noting found
               return apply_filters( 'div_pluralize', $string );
             }
 
             /**
-            * Singularizes English nouns.
-            *
-            * @access public
-            * @static
-            * @param  string    $word    English noun to singularize
-            * @return string Singular noun.
-            *
-            * @author Gijs Jorissen
-            * @since 1.0
-            */
+             * Singularizes English nouns
+             * @author     Gijs Jorissen
+             *
+             * @param      string  $word        English noun to singularize
+             * @return     string  $singular
+             */
             static function singularize($word) {
                 $singular = array (
                 '/(quiz)zes$/i' => '\1',
@@ -256,31 +308,24 @@ namespace DIV\services{
             }
 
             /**
-            * Singularizes the slug.
-            *
-            * @access public
-            * @static
-            * @param  string    $word    English noun to singularize
-            * @return string Singular noun.
-            *
-            * @author Gijs Jorissen
-            * @since 1.0
-            */
+             * Singularizes the slug
+             * @author     Gijs Jorissen
+             *
+             * @param      string  $word        English noun to singularize
+             * @return     string  $singular
+             */
             static function singularize_slug($word) {
               return self::singularize(self::slugify($word));
             }
 
             /**
-            * CamelCase String.
-            *
-            * @access public
-            * @param <STRING> $string
-            * @return <STRING> $camelCaseString.
-            * @link uncamelcaser: via http://www.paulferrett.com/2009/php-camel-case-functions/
-            *
-            * @author Nick Worth
-            * @since 1.0
-            */
+             * CamelCase String
+             * @author     Nick Worth
+             * @link       uncamelcaser: via http://www.paulferrett.com/2009/php-camel-case-functions/
+             *
+             * @param      string  $string
+             * @return     string  $camelCaseString.
+             */
             static function camel_case($str) {
               $str[0] = strtolower($str[0]);
               $func = create_function('$c', 'return "_" . strtolower($c[1]);');
@@ -288,16 +333,13 @@ namespace DIV\services{
             }
             
             /**
-            * Truncate String
-            *
-            * @access public
-            * @param <STRING> $string
-            * @param <NUMBER> $truncated
-            * @return <STRING> $truncated_text.
-            *
-            * @author Nick Worth
-            * @since 1.0
-            */
+             * Truncate String
+             * @author     Nick Worth
+             *
+             * @param      string  $string
+             * @param      number  $truncated
+             * @return     string  $truncated_text
+             */
             static function truncate($string, $truncated=100) {
               $parts = preg_split('/([\s\n\r]+)/', $string, null, PREG_SPLIT_DELIM_CAPTURE);
               $parts_count = count($parts);
@@ -316,27 +358,21 @@ namespace DIV\services{
              * Checks if the callback is a Wordpress callback
              * So, if the class, method and/or function exists. If so, call it.
              * If it doesn't use the data array.
+             * @author     Gijs Jorissen
              * 
-             * @param string|array    $callback
-             * @return  boolean
-             *
-             * @author  Gijs Jorissen
-             * @since   1.5
-             * 
+             * @param      string|array  $callback
+             * @return     boolean
              */
             static function is_wp_callback( $callback ) {
-              return ( ! is_array( $callback ) ) || ( is_array( $callback ) && ( ( isset( $callback[1] ) && ! is_array( $callback[1] ) && method_exists( $callback[0], $callback[1] ) ) || ( isset( $callback[0] ) && ! is_array( $callback[0] ) && class_exists( $callback[0] ) ) ) );
+                return ( ! is_array( $callback ) ) || ( is_array( $callback ) && ( ( isset( $callback[1] ) && ! is_array( $callback[1] ) && method_exists( $callback[0], $callback[1] ) ) || ( isset( $callback[0] ) && ! is_array( $callback[0] ) && class_exists( $callback[0] ) ) ) );
             }
 
             /**
              * Check if the term is reserved by Wordpress
+             * @author     Gijs Jorissen
              * 
-             * @param   string      $term
-             * @return  boolean
-             *
-             * @author  Gijs Jorissen
-             * @since   1.6
-             * 
+             * @param      string   $term
+             * @return     boolean
              */
             static function is_reserved_term( $term ) {
                 if( ! in_array( $term, self::$_reserved ) ) return false;
@@ -345,19 +381,16 @@ namespace DIV\services{
             }
 
             /**
-            * First Date
-            * Return the first day of the Week/Month/Quarter/Year that the current/provided date falls within
-            *
-            * @access   public
-            * @param    string   $period -The period to find the first day of. ('year', 'quarter', 'month', 'week')
-            * @param    DateTime $date   -The date to use instead of the current date
-            * @return   DateTime
-            * @throws   InvalidArgumentException
-            * @link     http://davidhancock.co/2013/11/get-the-firstlast-day-of-a-week-month-quarter-or-year-in-php/
-            *
-            * @author   Nick Worth
-            * @since    1.0
-            */
+             * Return the first day of the Week/Month/Quarter/Year that the 
+             * current/provided date falls within
+             * @author     Nick Worth
+             * @link       http://davidhancock.co/2013/11/get-the-firstlast-day-of-a-week-month-quarter-or-year-in-php/
+             *
+             * @param      string    $period  The period to find the first day of. ('year', 'quarter', 'month', 'week')
+             * @param      DateTime  $date    The date to use instead of the current date
+             * @return     DateTime
+             * @throws     InvalidArgumentException
+             */
             static function firstDayOf($period, DateTime $date = null) {
                 $period = strtolower($period);
                 $validPeriods = array('year', 'quarter', 'month', 'week');
@@ -396,16 +429,13 @@ namespace DIV\services{
             }
 
             /**
-             * Last Date
              * Return the last day of the Week/Month/Quarter/Year that the current/provided date falls within
+             * @author     Nick Worth
              *
-             * @param   string   $period -The period to find the last day of. ('year', 'quarter', 'month', 'week')
-             * @param   DateTime $date   -The date to use instead of the current date
-             * @return  DateTime
-             * @throws  InvalidArgumentException
-             *
-             * @author  Nick Worth
-             * @since   1.0
+             * @param      string    $period  The period to find the last day of. ('year', 'quarter', 'month', 'week')
+             * @param      DateTime  $date    The date to use instead of the current date
+             * @return     DateTime
+             * @throws     InvalidArgumentException
              */
             static function lastDayOf($period, DateTime $date = null) {
                 $period = strtolower($period);
@@ -416,8 +446,7 @@ namespace DIV\services{
 
                 $newDate = ($date === null) ? new DateTime() : clone $date;
 
-                switch ($period)
-                {
+                switch ($period) {
                     case 'year':
                         $newDate->modify('last day of december ' . $newDate->format('Y'));
                         break;
@@ -447,13 +476,10 @@ namespace DIV\services{
 
             /**
              * Recursive method to determine the path to the custom folder
+             * @author     Gijs Jorissen
              *
-             * @param   string $path
-             * @return  string
-             *
-             * @author  Gijs Jorissen
-             * @since   1.0
-             *
+             * @param      string  $path
+             * @return     string
              */
             static function _determine_custom_dir( $path = __FILE__ ) {
                 $path = dirname( $path );
@@ -463,33 +489,28 @@ namespace DIV\services{
                 $current_dir = $explode_path[count( $explode_path ) - 1];
                 array_push( $this->dir, $current_dir );
 
-                if( $current_dir == 'wp-content' )
-                {
-                    // Build new paths
+                if( $current_dir == 'wp-content' ) {
+                    # Build new paths
                     $path = '';
                     $directories = array_reverse( $this->dir );
 
-                    foreach( $directories as $dir )
-                    {
+                    foreach( $directories as $dir ) {
                         $path = $path . '/' . $dir;
                     }
 
                     $this->dir = $path;
-                }
-                else {
+                } else {
                     return $this->_determine_custom_dir( $path );
                 }
             } 
 
             /**
              * Return the output of an include file to a string variable
-             * @link    http://stackoverflow.com/a/2150215/1058371
-             * @param   string $file path to the file you want to encapsulate
-             * @return  string
-             *
-             * @author  Jeremy Kauffman
-             * @since   1.0
-             *
+             * @author     Jeremy Kauffman
+             * @link       http://stackoverflow.com/a/2150215/1058371
+             * 
+             * @param      string  $file  path to the file you want to encapsulate
+             * @return     string
              */
             static function return_output($file){
                 ob_start();
@@ -498,13 +519,10 @@ namespace DIV\services{
             }
 
             /**
-             * Is Email
              * Returns whether a submitted string is a valid email address
-             *
-             * @param   string   $email
-             *
              * @author  Michael Rushton
-             * @since   0.2.1
+             *
+             * @param      string  $email
              */
             static function IsEmail($email) {
                 return filter_var($email, FILTER_VALIDATE_EMAIL);
