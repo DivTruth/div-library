@@ -528,6 +528,66 @@ namespace DIV\services{
                 return filter_var($email, FILTER_VALIDATE_EMAIL);
             }
 
+            /**
+             * Get the current url (including parameters)
+             *
+             * @return     string
+             */
+            static function currentURL(){
+                $protocol = strpos(strtolower($_SERVER['SERVER_PROTOCOL']),'https') === FALSE ? 'http' : 'https';
+                $host     = $_SERVER['HTTP_HOST'];
+                $script   = $_SERVER['SCRIPT_NAME'];
+                $params   = $_SERVER['QUERY_STRING'];
+
+                return $protocol . '://' . $host . $script . '?' . $params;
+            }
+
+            /**
+             * Encrypt a given string with AES-256-CBC
+             * NOTE: AES is used by the U.S. gov't to encrypt top secret documents
+             *  
+             * @param      string $data
+             * @return     string
+             */
+            static function encrypt($data){
+                # Setup the initialization vector
+                $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
+                $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+                # Encrypt the data
+                $encryptedMessage = openssl_encrypt($data, "AES-256-CBC", self::getEncryptKey(), 0, $iv);
+                return base64_encode($encryptedMessage.'~~~'.$iv);
+            }
+
+            /**
+             * Decrypt a given string with AES-256-CBC
+             * NOTE: AES is used by the U.S. gov't to encrypt top secret documents
+             *
+             * @param      string $encrypted
+             * @return     string
+             */
+            static function decrypt($encrypted){
+                # Separate the encrypted data from the initialization vector ($iv)
+                $data = explode('~~~', base64_decode($encrypted));
+                # Decrypt the data
+                if(isset($data[1])){
+                    $decryptedMessage = openssl_decrypt($data[0], "AES-256-CBC", self::getEncryptKey(), 0, $data[1]);
+                    return $decryptedMessage;
+                } else {
+                    return $encrypted;
+                }
+            }
+
+            private static function getEncryptKey(){
+                $key = get_option( 'div_encrypt_key' );
+                if($key==''){
+                    $encryption_key = base64_encode(openssl_random_pseudo_bytes(32));
+                    $key = add_option( 'div_encrypt_key', $encryption_key, '', 'no' );
+                    return $key;
+                } else {
+                    return $key;
+                }
+            }
+
         }
 
     endif;
