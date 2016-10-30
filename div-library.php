@@ -118,13 +118,12 @@ final class div_library {
 
 		# Convert to proper class file structure
 		$class = str_replace('_', '-', strtolower($class));
-		
+
 		# Check for div include class structure
 		if( is_file($this->path['includes_dir'].'class-'.$class.'.php') )
 			require $this->path['includes_dir'].'class-'.$class.'.php';
 		else if( is_file($this->path['includes_dir'].'fields/'.$class.'.php') )
 			require $this->path['includes_dir'].'fields/'.$class.'.php';
-			
 	}
 
 	/**
@@ -142,7 +141,6 @@ final class div_library {
 		# Include service class
 		if( is_file($this->path['services_dir'].$class.'.php') )
 			require $this->path['services_dir'].$class.'.php';
-
 	}
 
 	/**
@@ -262,8 +260,7 @@ final class div_library {
 /**
  * Returns the main instance of div_library to prevent the need to use globals.
  *
- * @since  1.0
- * @return div_library
+ * @return div_library  $library
  */
 if(class_exists('div_library')){
 	# Installation and uninstallation hooks
