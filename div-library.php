@@ -3,7 +3,7 @@
  * Plugin Name: Div Library
  * Plugin URI: http://divblend.com/div-library/
  * Description: A powerful, indispensable, library of extendable tools and classes for theme developers who build custom WordPress solutions. Custom Post Type (CPT), Widget, Shortcode, User Role, and other classes making development more effecient. <br/><strong>WARNING:</strong> Deactivating could have negative effects on your site if other active or "Must Use" plugins are using this library.
- * Version: 0.3.0 (beta)
+ * Version: 0.5.0 (beta)
  * Author: Div Blend Team
  * Author URI: http://divblend.com/div-blend-contributors/
  * Requires at least: 3.8
@@ -30,7 +30,7 @@ final class div_library {
 	 * 
 	 * @var 	string
 	 */
-	public $version = '0.3.0';
+	public $version = '0.5.0';
 
 	/**
 	 * Path array for all known directories
@@ -105,6 +105,7 @@ final class div_library {
 	private function autoload(){
 		spl_autoload_register( array( $this, 'includes' ) );
 		spl_autoload_register( array( $this, 'services' ) );
+		spl_autoload_register( array( $this, 'objects' ) );
 	}
 
 	/**
@@ -141,6 +142,24 @@ final class div_library {
 		# Include service class
 		if( is_file($this->path['services_dir'].$class.'.php') )
 			require $this->path['services_dir'].$class.'.php';
+	}
+
+	/**
+	 * Autoload the objects classes
+	 *
+	 * @param      string  $class
+	 */
+	private function objects( $class ) {
+		# Check for div object class type
+		if (strpos($class, 'DIV\\objects') === false) return;
+
+		# Convert to proper service class file structure
+		$class = str_replace('\\', '-', strtolower($class));
+		$class = str_replace('_', '-', strtolower($class));
+		
+		# Include service class
+		if( is_file($this->path['objects_dir'].$class.'.php') )
+			require $this->path['objects_dir'].$class.'.php';
 	}
 
 	/**
@@ -203,13 +222,14 @@ final class div_library {
 		# Includes
 		$this->path['includes_dir']		= $this->plugin_path().'/includes/';
 		$this->path['fields_dir']		= $this->path['includes_dir'].'fields/';
+		$this->path['services_dir']		= $this->path['includes_dir'].'services/';
+		$this->path['objects_dir']		= $this->path['includes_dir'].'objects/';
 			
 			$this->path['includes_url']		= $this->plugins_url().'/includes/';
 			$this->path['fields_url']		= $this->path['includes_url'].'fields/';		
+			$this->path['services_url']		= $this->path['includes_url'].'services/';		
+			$this->path['objects_url']		= $this->path['includes_url'].'objects/';		
 		
-		# Services
-		$this->path['services_dir']		= $this->plugin_path().'/services/';
-		$this->path['services_url']		= $this->plugins_url().'/services/';
 	}
 
 	/**
