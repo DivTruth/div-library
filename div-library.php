@@ -2,12 +2,12 @@
 /**
  * Plugin Name: Div Library
  * Plugin URI: http://divblend.com/div-library/
- * Description: A powerful, indispensable, library of extendable tools and classes for theme developers who build custom WordPress solutions. Custom Post Type (CPT), Widget, Shortcode, User Role, and other classes making development more effecient. <strong>WARNING:</strong> Deactivating could have negative effects on your site if other active or "Must Use" plugins are using this library.
- * Version: 0.2.1 (alpha)
+ * Description: A powerful, indispensable, library of extendable tools and classes for theme developers who build custom WordPress solutions. Custom Post Type (CPT), Widget, Shortcode, User Role, and other classes making development more effecient. <br/><strong>WARNING:</strong> Deactivating could have negative effects on your site if other active or "Must Use" plugins are using this library.
+ * Version: 0.5.0 (beta)
  * Author: Div Blend Team
  * Author URI: http://divblend.com/div-blend-contributors/
  * Requires at least: 3.8
- * Tested up to: 3.9
+ * Tested up to: 4.6.1
  *
  * Text Domain: divlibrary
  *
@@ -15,9 +15,9 @@
  * @category Core
  * @author Div Blend Team
  */
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; # Exit if accessed directly
-}
+
+# Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Main div_library Class
@@ -26,36 +26,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class div_library {
 
 	/**
+	 * Div Library version
+	 * 
 	 * @var 	string
-	 * @since   1.0
 	 */
-	public $version = '0.2.2';
+	public $version = '0.5.0';
 
 	/**
+	 * Path array for all known directories
+	 * 
 	 * @var 	array
-	 * @since   1.0
 	 */
 	public $path = array();
 
 	/**
-	 * @var 	DIV_Detection
-	 * @since   1.0
-	 */
-	public $user_agent = null;
-
-	/**
-	 * @var div_library The single instance of the class
-	 * @since 1.0
+	 * The single instance of the class
+	 * 
+	 * @var div_library
 	 */
 	protected static $_instance = null;
 
 	/**
 	 * Main div_library Instance
-	 * Ensures only one instance of div_library is loaded or can be loaded.
+	 * 
+	 * NOTE: Ensures only one instance of div_library is loaded or can be loaded.
 	 *
-	 * @since 1.0
 	 * @static
-	 * @see $library()
+	 * @see div_library()
 	 * @return div_library - Main instance
 	 */
 	public static function instance() {
@@ -67,8 +64,6 @@ final class div_library {
 
 	/**
 	 * Cloning is forbidden.
-	 *
-	 * @since 1.0
 	 */
 	public function __clone() {
 		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'divlibrary' ), $this->version );
@@ -76,58 +71,127 @@ final class div_library {
 
 	/**
 	 * Unserializing instances of this class is forbidden.
-	 *
-	 * @since 1.0
 	 */
 	public function __wakeup() {
 		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'divlibrary' ), $this->version );
 	}
 
 	/**
-	 * Auto-load in-accessible properties on demand.
-	 *
-	 * @param mixed $key
-	 * @return mixed
+	 * div_library Constructor
 	 */
-	public function __get( $key ) {
-		if ( method_exists( $this, $key ) ) {
-			return $this->$key();
-		}
+	public function __construct() {
+		# Define path variables
+		$this->define_paths();
+
+		# Auto load library classes
+		$this->autoload();
+
+		# Library core div functions
+		require_once( 'includes/div-core-functions.php' );
+
+		# Hooks
+		$this->hooks();
+
+		# Div Library loading complete
+		do_action( 'divlibrary_loaded', $this );
 	}
 
 	/**
-	 * div_library Constructor.
-	 * @since   1.0
-	 * @access public
-	 * @return div_library
+	 * Register auto-loader methods
+	 * 
+	 * NOTE: Auto-load classes on demand. This effectively creates a queue of autoload 
+	 * functions, and runs through each of them in the order they are defined
 	 */
-	public function __construct() {
-		// Auto-load classes on demand. This effectively creates a queue of autoload functions, and runs through each of them in the order they are defined.
-		if ( function_exists( "__autoload" ) ) {
-			spl_autoload_register( "__autoload" );
-		}
+	private function autoload(){
+		spl_autoload_register( array( $this, 'includes' ) );
+		spl_autoload_register( array( $this, 'services' ) );
+		spl_autoload_register( array( $this, 'objects' ) );
+		spl_autoload_register( array( $this, 'patterns' ) );
+	}
 
-		spl_autoload_register( array( $this, 'autoload' ) );
+	/**
+	 * Autoload the include classes
+	 *
+	 * @param      string  $class
+	 */
+	private function includes( $class ) {
+		# Check for div include class type
+		if (stripos($class, 'DIV_') === false) return;
 
-		// Define path variables
-		$this->define_paths();
+		# Convert to proper class file structure
+		$class = str_replace('_', '-', strtolower($class));
 
-		// Include required files
-		$this->includes();
+		# Check for div include class structure
+		if( is_file($this->path['includes_dir'].'class-'.$class.'.php') )
+			require $this->path['includes_dir'].'class-'.$class.'.php';
+		else if( is_file($this->path['includes_dir'].'fields/'.$class.'.php') )
+			require $this->path['includes_dir'].'fields/'.$class.'.php';
+	}
 
-		// Hooks
+	/**
+	 * Autoload the service classes
+	 *
+	 * @param      string  $class
+	 */
+	private function services( $class ) {
+		# Check for div service class type
+		if (strpos($class, 'DIV\\services') === false) return;
+
+		# Convert to proper service class file structure
+		$class = str_replace('\\', '-', strtolower($class));
+		
+		# Include service class
+		if( is_file($this->path['services_dir'].$class.'.php') )
+			require $this->path['services_dir'].$class.'.php';
+	}
+
+	/**
+	 * Autoload the object classes
+	 *
+	 * @param      string  $class
+	 */
+	private function objects( $class ) {
+		# Check for div object class type
+		if (strpos($class, 'DIV\\objects') === false) return;
+
+		# Convert to proper object class file structure
+		$class = str_replace('\\', '-', strtolower($class));
+		$class = str_replace('_', '-', strtolower($class));
+		
+		# Include object class
+		if( is_file($this->path['objects_dir'].$class.'.php') )
+			require $this->path['objects_dir'].$class.'.php';
+	}
+
+	/**
+	 * Autoload the pattern classes
+	 *
+	 * @param      string  $class
+	 */
+	private function patterns( $class ) {
+		# Check for div pattern class type
+		if (strpos($class, 'DIV\\patterns') === false) return;
+
+		# Convert to proper pattern class file structure
+		$class = str_replace('\\', '-', strtolower($class));
+		$class = str_replace('_', '-', strtolower($class));
+		
+		# Include pattern class
+		if( is_file($this->path['patterns_dir'].$class.'.php') )
+			require $this->path['patterns_dir'].$class.'.php';
+	}
+
+	/**
+	 * Setup action and filter hooks
+	 */
+	private function hooks(){
 		add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'action_links' ) );
 		add_action( 'init', array( $this, 'init' ), 0 );
-		// add_action( 'init', array( 'DIV_Shortcodes', 'init' ), 10 );
-
-		// Div Library loading complete
-		do_action( 'divlibrary_loaded', $this );
 	}
 
 	/**
 	 * Activate the plugin
 	 *
-	 * @since   1.0
 	 * @return  void
 	 */
 	public static function activate() {
@@ -138,7 +202,6 @@ final class div_library {
 	/**
 	 * Deactivate the plugin
 	 *
-	 * @since   1.0
 	 * @return  void
 	 */
 	public static function deactivate() {
@@ -155,35 +218,8 @@ final class div_library {
 	public function action_links( $links ) {
 		return array_merge( array(
 			// '<a href="' . admin_url( 'admin.php?page=div-settings' ) . '">' . __( 'Settings', 'divlibrary' ) . '</a>',
-			'<a href="' . esc_url( apply_filters( 'divlibrary_docs_url', 'http://www.divblend.com/div-library', 'divlibrary' ) ) . '">' . __( 'Documentation', 'divlibrary' ) . '</a>'
+			'<a href="' . esc_url( apply_filters( 'divlibrary_docs_url', 'http://divblend.com/div-library', 'divlibrary' ) ) . '">' . __( 'Documentation', 'divlibrary' ) . '</a>'
 		), $links );
-	}
-
-	/**
-	 * Auto-load div_library classes on demand to reduce memory consumption.
-	 * TODO: Determine if autoload is necessary/possible in the library
-	 * @since   1.0
-	 * @param 	mixed $class
-	 * @return 	void
-	 */
-	public function autoload( $class ) {
-		$path  = null;
-		$class = strtolower( $class );
-		$file = 'class-' . str_replace( '_', '-', $class ) . '.php';
-
-		if ( strpos( $class, 'div_shortcode_' ) === 0 ) {
-			$path = $this->plugin_path() . '/includes/shortcodes/';
-		} 
-
-		if ( $path && is_readable( $path . $file ) ) {
-			include_once( $path . $file );
-			return;
-		}
-
-		if ( $path && is_readable( $path . $file ) ) {
-			include_once( $path . $file );
-			return;
-		}
 	}
 
 	/**
@@ -195,59 +231,39 @@ final class div_library {
 		$this->path['theme_url'] 			= get_stylesheet_directory_uri().'/';
 		$this->path['theme_dir'] 			= get_stylesheet_directory().'/';
 
-		#assets
+		# Assets
 		$this->path['assets_dir']		= $this->plugin_path().'/assets/';
 		$this->path['css_dir']			= $this->path['assets_dir'].'css/';
 
 			$this->path['assets_url']		= $this->plugins_url().'/assets/';
 			$this->path['css_url']			= $this->path['assets_url'].'css/';
 		
-		#includes
+		# Includes
 		$this->path['includes_dir']		= $this->plugin_path().'/includes/';
 		$this->path['fields_dir']		= $this->path['includes_dir'].'fields/';
+		$this->path['services_dir']		= $this->path['includes_dir'].'services/';
+		$this->path['objects_dir']		= $this->path['includes_dir'].'objects/';
+		$this->path['patterns_dir']		= $this->path['includes_dir'].'patterns/';
 			
 			$this->path['includes_url']		= $this->plugins_url().'/includes/';
-			$this->path['fields_url']		= $this->path['includes_url'].'fields/';
+			$this->path['fields_url']		= $this->path['includes_url'].'fields/';		
+			$this->path['services_url']		= $this->path['includes_url'].'services/';		
+			$this->path['objects_url']		= $this->path['includes_url'].'objects/';		
+			$this->path['patterns_url']		= $this->path['includes_url'].'patterns/';		
+		
 	}
 
 	/**
-	 * Include required core files used in admin and on the frontend.
-	 */
-	private function includes() {
-		include_once( 'includes/div-core-functions.php' );		# Core div functions
-		foreach( glob($this->path['includes_dir'] . 'class-*.php') as $class_path ) {
-			require_once( $class_path );
-		}
-		// include_once( 'includes/class-div-prints.php' );		# Printout settings class
-		// include_once( 'includes/class-div-detection.php' );		# Browser/Device Detection class
-		// include_once( 'includes/class-div-shortcodes.php' );	# Shortcodes class
-		// include_once( 'includes/class-div-widgets.php' );		# For creating custom widgets
-
-		// PCO Image Widget Field - by: PeytzCo, Compute, jamesbonham
-		include_once( 'includes/fields/image-widget-field/pco-image-widget-field.php' );
-
-		if ( is_admin() ) {
-			#TODO: include_once( 'includes/admin/class-wc-admin.php' );
-		}
-
-		#TODO: Consider/Setup autoloading options
-		// Classes (used on all pages)
-		include_once( 'includes/class-div-helper.php' );		# Power tools for data manipluation
-		include_once( 'includes/class-div-admin.php' );			# WP Admin helper methods
-		include_once( 'includes/class-div-taxonomy.php' );		# For creating Custom taxonomies
-		include_once( 'includes/class-div-cpt.php' );			# For creating Custom Post Types
-		include_once( 'includes/class-div-roles.php' );			# For creating Custom User Types
-
-	}
-
-	/**
-	 * Init div_library when WordPress Initialises.
+	 * Init div_library when WordPress Initialises
+	 * 
+	 * NOTE: Hooks added for developers to enter during
+	 * 		 the library initialization
 	 */
 	public function init() {
-		// Before init action
+		# Before init action
 		do_action( 'before_divlibrary_init' );
 
-		// Init action
+		# Init action
 		do_action( 'divlibrary_init' );
 	}
 
@@ -285,11 +301,10 @@ final class div_library {
 /**
  * Returns the main instance of div_library to prevent the need to use globals.
  *
- * @since  1.0
- * @return div_library
+ * @return div_library  $library
  */
 if(class_exists('div_library')){
-	// Installation and uninstallation hooks
+	# Installation and uninstallation hooks
 	register_activation_hook(__FILE__, array('div_library', 'activate'));
 	register_deactivation_hook(__FILE__, array('div_library', 'deactivate'));
 

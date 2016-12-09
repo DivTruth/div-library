@@ -43,7 +43,7 @@ abstract class DIV_Module {
 
         # Default: array( page-{plural-cpt}.php => Plural CPT )
         $this->page_templates = array(
-            'page-'.DIV_Helper::pluralize($this->cpt).'.php' => DIV_Helper::beautify(DIV_Helper::pluralize($this->cpt)),
+            'page-'.DIV\services\helper::pluralize($this->cpt).'.php' => DIV\services\helper::beautify(DIV\services\helper::pluralize($this->cpt)),
         );
     }
 
@@ -99,7 +99,7 @@ abstract class DIV_Module {
         if ($query->have_posts()) : while ($query->have_posts()) : $query->the_post();
 
             if(file_exists($this->dir . '/loop-'.$this->cpt.'.php')){
-                echo apply_filters( 'loop_content_'.$this->cpt, DIV_Helper::return_output($this->dir . '/loop-'.$this->cpt.'.php') );
+                echo apply_filters( 'loop_content_'.$this->cpt, DIV\services\helper::return_output($this->dir . '/loop-'.$this->cpt.'.php') );
             }
 
         endwhile;
@@ -109,7 +109,7 @@ abstract class DIV_Module {
         else :
 
             _e('<article id="post-not-found" class="hentry clearfix">');
-                echo apply_filters( $this->cpt.'_not_found', 'No '.DIV_Helper::pluralize($this->cpt).' were found.' );
+                echo apply_filters( $this->cpt.'_not_found', 'No '.DIV\services\helper::pluralize($this->cpt).' were found.' );
             _e('</article>');
     
         endif;
@@ -245,7 +245,7 @@ abstract class DIV_Module {
      *
      */
     public function page_template($templates) {
-        $page_templates = new DIV_Template($this->page_templates, $this->dir);
+        $page_templates = new DIV\objects\page_template($this->page_templates, $this->dir);
     }
 
     /**

@@ -44,7 +44,7 @@ class DIV_Role {
 				$this->register_roles($name);
 			} else {
 	            $name     		= $name;
-	            $display_name 	= ( $display_name ) ? $display_name : DIV_Helper::beautify( $name );
+	            $display_name 	= ( $display_name ) ? $display_name : DIV\services\helper::beautify( $name );
 	            $capabilities 	= self::setup_capabilities($capabilities);
 	    		$this->register_role($name,$display_name,$capabilities);
 	    	}
@@ -58,8 +58,8 @@ class DIV_Role {
 	 */
 	function register_roles($name){
 		foreach ($name as $n => $args) {
-            $role 			= DIV_Helper::uglify( $n );
-            $display_name 	= ( !empty($args['display_name']) ) ? $args['display_name'] : DIV_Helper::beautify( $n );
+            $role 			= DIV\services\helper::uglify( $n );
+            $display_name 	= ( !empty($args['display_name']) ) ? $args['display_name'] : DIV\services\helper::beautify( $n );
             $capabilities 	= self::setup_capabilities($args['capabilities']);
 			$this->register_role($role,$display_name,$capabilities);
 		}

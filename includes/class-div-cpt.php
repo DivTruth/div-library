@@ -38,13 +38,13 @@ class DIV_CPT{
         if( ! empty( $name ) ) {
             // If $name is an array, the first element is the singular name, the second is the plural name
             if( is_array( $name ) ) {
-                $this->name     = DIV_Helper::uglify( $name[0] );
-                $this->title    = DIV_Helper::beautify( $name[0] );
-                $this->plural   = DIV_Helper::beautify( $name[1] );
+                $this->name     = DIV\services\helper::uglify( $name[0] );
+                $this->title    = DIV\services\helper::beautify( $name[0] );
+                $this->plural   = DIV\services\helper::beautify( $name[1] );
             } else {
-                $this->name     = DIV_Helper::uglify( $name );
-                $this->title    = DIV_Helper::beautify( $name );
-                $this->plural   = DIV_Helper::pluralize( DIV_Helper::beautify( $name ) );
+                $this->name     = DIV\services\helper::uglify( $name );
+                $this->title    = DIV\services\helper::beautify( $name );
+                $this->plural   = DIV\services\helper::pluralize( DIV\services\helper::beautify( $name ) );
             }
 
             $this->args         = $args;

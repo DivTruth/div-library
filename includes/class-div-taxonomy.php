@@ -38,7 +38,7 @@ class DIV_Taxonomy{
             $this->post_type_name = $post_type_name;
 
             // Taxonomy properties
-            $this->taxonomy_name        = DIV_Helper::uglify( $name );
+            $this->taxonomy_name        = DIV\services\helper::uglify( $name );
             $this->taxonomy_labels      = $labels;
             $this->taxonomy_args        = $args;
 
@@ -62,8 +62,8 @@ class DIV_Taxonomy{
      *
      */
     function register_taxonomy() {
-        $name       = DIV_Helper::beautify( $this->taxonomy_name );
-        $plural     = DIV_Helper::pluralize( $name );
+        $name       = DIV\services\helper::beautify( $this->taxonomy_name );
+        $plural     = DIV\services\helper::pluralize( $name );
 
         // Default labels, overwrite them with the given labels.
         $labels = array_merge(
