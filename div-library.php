@@ -106,6 +106,7 @@ final class div_library {
 		spl_autoload_register( array( $this, 'includes' ) );
 		spl_autoload_register( array( $this, 'services' ) );
 		spl_autoload_register( array( $this, 'objects' ) );
+		spl_autoload_register( array( $this, 'patterns' ) );
 	}
 
 	/**
@@ -128,7 +129,7 @@ final class div_library {
 	}
 
 	/**
-	 * Autoload the services classes
+	 * Autoload the service classes
 	 *
 	 * @param      string  $class
 	 */
@@ -145,7 +146,7 @@ final class div_library {
 	}
 
 	/**
-	 * Autoload the objects classes
+	 * Autoload the object classes
 	 *
 	 * @param      string  $class
 	 */
@@ -153,13 +154,31 @@ final class div_library {
 		# Check for div object class type
 		if (strpos($class, 'DIV\\objects') === false) return;
 
-		# Convert to proper service class file structure
+		# Convert to proper object class file structure
 		$class = str_replace('\\', '-', strtolower($class));
 		$class = str_replace('_', '-', strtolower($class));
 		
-		# Include service class
+		# Include object class
 		if( is_file($this->path['objects_dir'].$class.'.php') )
 			require $this->path['objects_dir'].$class.'.php';
+	}
+
+	/**
+	 * Autoload the pattern classes
+	 *
+	 * @param      string  $class
+	 */
+	private function patterns( $class ) {
+		# Check for div pattern class type
+		if (strpos($class, 'DIV\\patterns') === false) return;
+
+		# Convert to proper pattern class file structure
+		$class = str_replace('\\', '-', strtolower($class));
+		$class = str_replace('_', '-', strtolower($class));
+		
+		# Include pattern class
+		if( is_file($this->path['patterns_dir'].$class.'.php') )
+			require $this->path['patterns_dir'].$class.'.php';
 	}
 
 	/**
@@ -224,11 +243,13 @@ final class div_library {
 		$this->path['fields_dir']		= $this->path['includes_dir'].'fields/';
 		$this->path['services_dir']		= $this->path['includes_dir'].'services/';
 		$this->path['objects_dir']		= $this->path['includes_dir'].'objects/';
+		$this->path['patterns_dir']		= $this->path['includes_dir'].'patterns/';
 			
 			$this->path['includes_url']		= $this->plugins_url().'/includes/';
 			$this->path['fields_url']		= $this->path['includes_url'].'fields/';		
 			$this->path['services_url']		= $this->path['includes_url'].'services/';		
 			$this->path['objects_url']		= $this->path['includes_url'].'objects/';		
+			$this->path['patterns_url']		= $this->path['includes_url'].'patterns/';		
 		
 	}
 
