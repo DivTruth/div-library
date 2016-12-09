@@ -245,7 +245,7 @@ abstract class DIV_Module {
      *
      */
     public function page_template($templates) {
-        $page_templates = new DIV_Template($this->page_templates, $this->dir);
+        $page_templates = new DIV\objects\page_template($this->page_templates, $this->dir);
     }
 
     /**
