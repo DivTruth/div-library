@@ -96,27 +96,27 @@ namespace DIV\objects{
             }
 
             /**
-        	 * Register Project Templates
-        	 * Checks if the template is assigned to the page
-        	 *
-        	 * @access public
-        	 * @param string
-        	 * @return string
-        	 */
+             * Register Project Templates
+             * Checks if the template is assigned to the page
+             *
+             * @access public
+             * @param string
+             * @return string
+             */
             public function view_project_template( $template ) {
                 global $post;
                 $id = ( isset( $post->ID ) ? get_the_ID() : NULL );
                 
                 if (!isset($this->templates[get_post_meta(
-        			$id, '_wp_page_template', true 
-        		)] ) ) {
+                    $id, '_wp_page_template', true 
+                )] ) ) {
                     return $template;
-                } 
+                }
 
-                $file = $this->dir.'\\'.get_post_meta( 
-        		$id, '_wp_page_template', true 
-        	);
-        		
+                $file = $this->dir.'/'.get_post_meta( 
+                    $id, '_wp_page_template', true 
+                );
+                
                 # Just to be safe, we check if the file exist first
                 if( file_exists( $file ) ) { return $file;
                 } else { echo '<strong>Template not found</strong>: '.$file; }
