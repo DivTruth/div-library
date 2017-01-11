@@ -92,12 +92,34 @@ namespace DIV\patterns{
 				        	if( method_exists($application, 'config_rest') ){
 				        		$application->config_rest();
 				        	}
-
 				        	# Verify the class method exist
 				        	if( method_exists($application, $_REQUEST['function']) ){
-					            # Execute action and echo the response
+					            # Execute action defined by the application
 					            $response = $application->$_REQUEST['function']();
-					            echo json_encode($response);
+					            
+					            # Before providing the response, make sure it didn't fail
+					            # from an expired session
+					            if( $application->expired_param!= NULL && $application->expired_code != NULL){
+					            	if( !$this->is_session_valid($application,$response)){
+					            		# Attempt refresh session using stored refresh token
+					            		if( $this->refresh_session($application) ){
+								            # Reconfigure REST and reattempt action
+								            $application->config_rest();
+								            $response = $application->$_REQUEST['function']();
+								        }
+					            	}
+					            	# Possibly attemp to cache the data response
+					            	else {
+					            		if( method_exists($application, 'cache_'.$_REQUEST['function']) ){
+					            			$cache_method = 'cache_'.$_REQUEST['function'];
+					            			$application->$cache_method($response);
+					            		}
+					            	}
+					            }
+
+			            		# Echo json response to ajax caller
+			            		echo json_encode($response);
+
 					        } else {
 					        	echo 'The '.$_REQUEST['class'].' class does not contain the '.$_REQUEST['function'].'() method';
 					        }
