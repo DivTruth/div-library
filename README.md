@@ -1,7 +1,7 @@
-Div Library (part of the Div Blend) - Alpha
+Div Library (part of the Div Blend Package) - Alpha
 ===================
 
-Div Library is a plugin that was developed to help maintain the WordPress integrity throughout the development process without sacrificing the freedom of creative solution for developers. Unlike "user-based frameworks" (i.e. Genesis) that are bulky and difficult to modify without being an expert, the Div Library is a **developer solution** with a minimalist approach to follow **#TheWordPRessWay**. Even as a young developer you will feel empowered with the best practices of the most common needs for WordPress development.
+Div Library is a plugin that was developed to help maintain the WordPress integrity throughout the development process without sacrificing the freedom of creative solutions for developers. Unlike "user-based frameworks" (i.e. Genesis) that are bulky and difficult to modify without being an expert, the Div Library is a **developer solution** with a minimalist approach to follow **#TheWordPRessWay**. Even as a young developer you will feel empowered with the best practices of the most common needs for WordPress development.
 
 Be sure to read more about this on the [Div Library Page](http://divblend.com/div-library). Also, please read [our philosophy](http://divblend.com/div-blend-philosophy/) and consider _why_ we have abstracted these components the way we have so that you can better understand the intention and scope of the Div Blend project as a whole. 
 
@@ -31,6 +31,7 @@ Quick Start
 2. **Begin Development**
 
 	a) Activate the plugin
+
 	b) Setup site application or a Div based plugin
 
 3. **For documentation** on how to develop with the Div Library, checkout [**the website**](http://divblend.com/div-library/)
