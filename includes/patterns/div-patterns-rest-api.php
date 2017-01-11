@@ -39,6 +39,17 @@ namespace DIV\patterns{
 		    protected $rest;
 
 		    /**
+		     * Optional property when an addon app wants REST_API to check for
+		     * expired session, both variables need to be defined
+		     * 
+		     * NOTE: OAuth provider class must have a refresh_session()
+		     * 		defined in order to enable this feature
+		     */
+		    protected $provider;		# i.e. - 'salesforce'
+		    protected $expired_param;	# i.e. - 'errorCode'
+		    protected $expired_code;	# i.e. - 'INVALID_SESSION_ID'
+
+		    /**
 		     * Used to configure the $rest object prior to
 		     * initiating an action. Child class must define
 		     * this method and effectively setup $rest
